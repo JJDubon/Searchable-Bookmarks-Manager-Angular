@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentBase } from './components/component-base';
 import { BookmarksService } from './services/bookmarks/bookmarks.service';
@@ -6,7 +6,8 @@ import { BookmarksService } from './services/bookmarks/bookmarks.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent extends ComponentBase implements OnInit {
 

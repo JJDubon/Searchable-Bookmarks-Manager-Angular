@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkTypes } from 'src/app/models/bookmark-types.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
@@ -6,7 +6,8 @@ import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 @Component({
   selector: 'app-bookmark-list',
   templateUrl: './bookmark-list.component.html',
-  styleUrls: ['./bookmark-list.component.css']
+  styleUrls: ['./bookmark-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookmarkListComponent implements OnInit, OnChanges {
 
