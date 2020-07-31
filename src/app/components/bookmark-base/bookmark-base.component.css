@@ -4,6 +4,7 @@
   left: -8px;
   padding: 8px 6px;
   cursor: pointer;
+  user-select: none;
 }
 
 .bookmark:hover {
