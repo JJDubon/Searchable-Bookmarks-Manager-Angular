@@ -37,6 +37,21 @@ export class BookmarksService {
   
       });
 
+      // Remove the bookmark when one has been deleted
+      this.chromeExtensionBridge.onBookmarkRemoved$.subscribe(({id, parentId}) => {
+
+        // Remove the bookmark from the map
+        delete this.bookmarksMap[id];
+
+        // Remove the bookmark from its parent's "children" member
+        const parent = this.bookmarksMap[parentId] as BookmarkFolderModel;
+        if (parent) {
+          parent.children = parent.children.filter(x => x !== id);
+          this.bookmarkChanged$.next(parent);
+        }
+
+      });
+
     });
 
     // Retrieve the bookmarks tree from the chrome extension api
