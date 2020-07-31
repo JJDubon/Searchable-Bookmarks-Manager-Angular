@@ -1,7 +1,7 @@
 /// <reference types="chrome"/>
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { BookmarkBaseModel } from '../../models/bookmark-base.model';
 import { BookmarkFolderModel } from '../../models/bookmark-folder.model';
 import { BookmarkLinkModel } from '../../models/bookmark-link.model';
@@ -11,7 +11,22 @@ import { BookmarkLinkModel } from '../../models/bookmark-link.model';
 })
 export class ChromeExtensionBridgeService {
 
-  constructor() { }
+  public onBookmarkCreated$ = new Subject<{model: BookmarkBaseModel}>();
+  public onBookmarkRemoved$ = new Subject<{id: string, parentId: string}>();
+  public onBookmarkChanged$ = new Subject<{id: string, title: string, url: string}>();
+  public onBookmarkMoved$ = new Subject<{id: string, parentId: string, oldParentId: string, index: number, oldIndex: number}>();
+  public onBookmarkChildrenReordered$ = new Subject<{id: string, childIds: string[]}>();
+
+  constructor() { 
+
+    // Listen to event changes in the bookmarks tree and broadcast Rxjs subjects when they fire
+    chrome.bookmarks.onCreated.addListener((id, node) => this.onBookmarkCreated$.next({model: nodeToModel(node)}));
+    chrome.bookmarks.onRemoved.addListener((id, info) => this.onBookmarkRemoved$.next({id, parentId: info.parentId}));
+    chrome.bookmarks.onChanged.addListener((id, info) => this.onBookmarkChanged$.next({id, title: info.title, url: info.url}));
+    chrome.bookmarks.onMoved.addListener((id, info) => this.onBookmarkMoved$.next({id, ...info}));
+    chrome.bookmarks.onChildrenReordered.addListener((id, info) => this.onBookmarkChildrenReordered$.next({id, childIds: info.childIds}));
+
+  }
 
   public readBookmarksTree(): Observable<{bookmarks: BookmarkBaseModel[], topLevelIds: string[]}> {
 
@@ -48,6 +63,16 @@ export class ChromeExtensionBridgeService {
 
       });
 
+    });
+
+  }
+
+  public getChildrenIds(id: string): Observable<string[]> {
+
+    return new Observable<string[]>(observer => {
+      chrome.bookmarks.getChildren(id, (children) => {
+        observer.next(children.map(x => x.id));
+      });
     });
 
   }
