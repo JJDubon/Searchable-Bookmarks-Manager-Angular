@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentBase } from './components/component-base';
 import { BookmarksService } from './services/bookmarks/bookmarks.service';
@@ -11,19 +10,24 @@ import { BookmarksService } from './services/bookmarks/bookmarks.service';
 })
 export class AppComponent extends ComponentBase implements OnInit {
 
-  private subs: Subscription[] = [];
+  public topLevelIds: string[] = [];
+  public initialized = false;
+  public loadingError = false;
 
-  constructor(private bookmarksService: BookmarksService) {
+  constructor(private cd: ChangeDetectorRef, private bookmarksService: BookmarksService) {
     super();
   }
 
   public ngOnInit(): void {
     
+    // When the bookmarks tree has initialized, read the ids of the highest level nodes ("Bookmarks Bar", "Other Bookmarks", etc...)
     this.bookmarksService.initialized$.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
-
-      const topLevelNodes = this.bookmarksService.getTopLevelNodes();
-      console.log("topLevelNodes", topLevelNodes);
-
+      this.topLevelIds = this.bookmarksService.getTopLevelIds();
+      this.initialized = true;
+      this.cd.detectChanges();
+    }, error => {
+      console.error(error);
+      this.loadingError = true;
     });
     
   }

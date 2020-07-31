@@ -13,15 +13,15 @@ export class ChromeExtensionBridgeService {
 
   constructor() { }
 
-  public readBookmarksTree(): Observable<{bookmarks: BookmarkBaseModel[], topLevelNodes: string[]}> {
+  public readBookmarksTree(): Observable<{bookmarks: BookmarkBaseModel[], topLevelIds: string[]}> {
 
-    return new Observable<{bookmarks: BookmarkBaseModel[], topLevelNodes: string[]}>(observer => {
+    return new Observable<{bookmarks: BookmarkBaseModel[], topLevelIds: string[]}>(observer => {
 
       // Read the bookmarks tree
       chrome.bookmarks.getTree((tree: chrome.bookmarks.BookmarkTreeNode[]) => {
 
         const bookmarks: BookmarkBaseModel[] = [];
-        const topLevelNodes: string[] = [];
+        const topLevelIds: string[] = [];
 
         tree.forEach(topLevelNode => {
           topLevelNode.children.forEach(managerNode => {
@@ -31,7 +31,7 @@ export class ChromeExtensionBridgeService {
             managerModel.modifiable = false;
 
             // Store the top level nodes (manager nodes) as access-points into the tree
-            topLevelNodes.push(managerModel.id);
+            topLevelIds.push(managerModel.id);
 
             // Iterate over the tree and store each child node
             walkTree(managerNode, (node) => {
@@ -43,7 +43,7 @@ export class ChromeExtensionBridgeService {
         });
 
         // Emit the information read from chrome and complete the observable
-        observer.next({ bookmarks, topLevelNodes });
+        observer.next({ bookmarks, topLevelIds });
         observer.complete();
 
       });

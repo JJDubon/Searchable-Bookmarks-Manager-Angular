@@ -1,0 +1,28 @@
+.bookmark {
+  width: 100%;
+  position: relative;
+  left: -8px;
+  padding: 8px 6px;
+  cursor: pointer;
+}
+
+.bookmark:hover {
+  background-color: #e3f2fd;
+}
+
+.bookmark:active {
+  background-color: #f2faff;
+}
+
+.bookmark > .bookmark-icon {
+  position: relative;
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+}
+
+.bookmark > .bookmark-title {
+  position: relative;
+  vertical-align: middle;
+  left: 6px;
+}

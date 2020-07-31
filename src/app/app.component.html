@@ -1,1 +1,9 @@
-<p>Hello World!</p>
+
+<main>
+  <p *ngIf="!initialized">Loading...</p>
+  <ng-container *ngIf="initialized">
+    <app-bookmark-list [bookmarkIds]="topLevelIds"></app-bookmark-list>
+  </ng-container>
+
+  <p *ngIf="loadingError">Failed to load bookmarks. Please refresh this extension.</p>
+</main>

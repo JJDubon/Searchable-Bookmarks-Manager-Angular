@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
+import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 
 @Component({
   selector: 'app-bookmark-folder',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookmarkFolderComponent implements OnInit {
 
-  constructor() { }
+  @Input() public bookmarkId: string;
+  public bookmark: BookmarkFolderModel;
 
-  ngOnInit(): void {
+  constructor(private cd: ChangeDetectorRef, private bookmarksService: BookmarksService) { }
+
+  public ngOnInit(): void {
+    this.bookmark = this.bookmarksService.getBookmark(this.bookmarkId) as BookmarkFolderModel;
   }
 
 }

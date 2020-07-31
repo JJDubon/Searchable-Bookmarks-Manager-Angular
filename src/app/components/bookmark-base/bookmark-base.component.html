@@ -1,1 +1,4 @@
-<p>bookmark-base works!</p>
+<div class="bookmark">
+  <img *ngIf="icon" class="bookmark-icon" [attr.src]="icon | allowUnsafe">
+  <span class="bookmark-title">{{title}}</span>
+</div>

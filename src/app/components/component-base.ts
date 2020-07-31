@@ -1,7 +1,8 @@
-import { OnDestroy } from '@angular/core';
+import { OnDestroy, Component } from '@angular/core';
 import { Subject } from 'rxjs';
 
-export class ComponentBase implements OnDestroy {
+@Component({ selector: 'app-base', template: '' }) // Unused, suppresses an angular build warning
+export abstract class ComponentBase implements OnDestroy {
 
   protected onDestroy$ = new Subject<boolean>();
 

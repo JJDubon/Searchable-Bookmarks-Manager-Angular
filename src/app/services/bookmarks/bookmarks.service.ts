@@ -11,14 +11,14 @@ export class BookmarksService {
   public initialized$ = new AsyncSubject<void>();
 
   private bookmarksMap: { [id: string]: BookmarkBaseModel };
-  private topLevelNodes: string[];
+  private topLevelIds: string[];
 
   constructor(private chromeExtensionBridge: ChromeExtensionBridgeService) { 
 
     // Retrieve the bookmarks tree from the chrome extension api
-    this.chromeExtensionBridge.readBookmarksTree().subscribe(({ bookmarks, topLevelNodes }) => {
+    this.chromeExtensionBridge.readBookmarksTree().subscribe(({ bookmarks, topLevelIds }) => {
 
-      this.topLevelNodes = topLevelNodes;
+      this.topLevelIds = topLevelIds;
       this.bookmarksMap = {};
       bookmarks.forEach(b => {
         this.bookmarksMap[b.id] = b;
@@ -31,8 +31,8 @@ export class BookmarksService {
 
   }
 
-  public getTopLevelNodes(): string[] {
-    return this.topLevelNodes;
+  public getTopLevelIds(): string[] {
+    return this.topLevelIds;
   }
 
   public getBookmark(id: string): BookmarkBaseModel {
