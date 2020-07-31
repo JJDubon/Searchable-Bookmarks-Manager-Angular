@@ -2,4 +2,5 @@
   padding-left: 8px;
   border-left: 2px solid #E1E2E1;
   transition: all 150ms ease-in-out;
+  transform-origin: top left;
 }

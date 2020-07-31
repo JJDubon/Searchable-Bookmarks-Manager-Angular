@@ -21,7 +21,6 @@ export class BookmarkListComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log("changes", changes);
     if (changes.bookmarkIds && this.bookmarkIds) {
       this.loadBookmarks();
     }

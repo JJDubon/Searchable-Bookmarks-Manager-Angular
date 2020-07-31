@@ -1,6 +1,6 @@
 <div *ngIf="bookmark">
-  <app-bookmark-base [title]="bookmark.title" icon="/assets/images/folder.svg"></app-bookmark-base>
-  <div class="folder-list">
+  <app-bookmark-base [title]="bookmark.title" icon="/assets/images/folder.svg" (click)="toggleState()"></app-bookmark-base>
+  <div [@toggle]="state" class="folder-list">
     <app-bookmark-list [bookmarkIds]="bookmark.children"></app-bookmark-list>
   </div>
 </div>
