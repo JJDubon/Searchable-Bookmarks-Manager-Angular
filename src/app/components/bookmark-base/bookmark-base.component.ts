@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 export class BookmarkBaseComponent implements OnInit {
 
   @Input() public title: string;
+  @Input() public tooltip: string;
   @Input() public icon: string;
 
   constructor() { }
