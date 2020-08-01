@@ -1,0 +1,8 @@
+
+<div class="context-menu" style="visibility: hidden; position: fixed" 
+     [style.left.px]="position.x" [style.top.px]="position.y" [matMenuTriggerFor]="contextMenu"> </div>
+<mat-menu #contextMenu="matMenu">
+	<ng-template matMenuContent let-item="item">
+		<button *ngFor="let item of items" mat-menu-item (click)="emitItemSelected(item.id)">{{item.text}}</button>
+	</ng-template>
+</mat-menu>

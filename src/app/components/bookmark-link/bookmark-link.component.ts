@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ComponentBase } from '../component-base';
+import { ContextMenuComponent, ContextMenuItem } from '../context-menu/context-menu.component';
 
 @Component({
   selector: 'app-bookmark-link',
@@ -13,7 +14,10 @@ import { ComponentBase } from '../component-base';
 export class BookmarkLinkComponent extends ComponentBase implements OnInit {
 
   @Input() public bookmarkId: string;
+  @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
+
   public bookmark: BookmarkLinkModel;
+  public contextMenuOptions: ContextMenuItem[];
 
   constructor(private cd: ChangeDetectorRef, private bookmarksService: BookmarksService) {
     super();
@@ -28,6 +32,23 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
       this.cd.detectChanges();
     });
 
+    // Determine which context menu options this link will display
+    this.contextMenuOptions = [];
+    this.contextMenuOptions.push({ id: 'openCurrentTab', text: 'Open in Current Tab' });
+    this.contextMenuOptions.push({ id: 'openNewTab', text: 'Open in New Tab' });
+    this.contextMenuOptions.push({ id: 'openNewWindow', text: 'Open in New Window' });
+    this.contextMenuOptions.push({ id: 'openNewIWindow', text: 'Open in New Incognito Window' });
+    this.contextMenuOptions.push({ id: 'editBookmark', text: 'Edit Bookmark' });
+    this.contextMenuOptions.push({ id: 'deleteBookmark', text: 'Delete Bookmark' });
+
+  }
+
+  public triggerContextMenu(ev: MouseEvent): void {
+    this.contextMenu.open(ev);
+  }
+
+  public contextItemSelected(id: string): void {
+    console.log("item selected", id); // TODO
   }
 
 }

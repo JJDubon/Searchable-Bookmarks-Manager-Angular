@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
@@ -7,6 +8,7 @@ import { BookmarkFolderComponent } from './components/bookmark-folder/bookmark-f
 import { BookmarkLinkComponent } from './components/bookmark-link/bookmark-link.component';
 import { BookmarkListComponent } from './components/bookmark-list/bookmark-list.component';
 import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
+import { ContextMenuComponent } from './components/context-menu/context-menu.component';
 
 @NgModule({
   declarations: [
@@ -15,11 +17,13 @@ import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
     BookmarkFolderComponent,
     BookmarkLinkComponent,
     BookmarkListComponent,
-    AllowUnsafePipe
+    AllowUnsafePipe,
+    ContextMenuComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

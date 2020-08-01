@@ -1,9 +1,10 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ComponentBase } from '../component-base';
+import { ContextMenuComponent, ContextMenuItem } from '../context-menu/context-menu.component';
 
 @Component({
   selector: 'app-bookmark-folder',
@@ -33,9 +34,11 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
   @Input() public bookmarkId: string;
   @Input() public defaultState: 'open' | 'closed' = 'open';
+  @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
   public bookmark: BookmarkFolderModel;
   public state: 'open' | 'closed' = this.defaultState;
+  public contextMenuOptions: ContextMenuItem[];
 
   constructor(private cd: ChangeDetectorRef, private bookmarksService: BookmarksService) { 
     super();
@@ -50,11 +53,28 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
       this.cd.detectChanges();
     });
 
+    // Determine which context menu options this folder will display
+    this.contextMenuOptions = [];
+    this.contextMenuOptions.push({ id: 'newFolder', text: 'New Folder' });
+    this.contextMenuOptions.push({ id: 'newBookmark', text: 'New Bookmark' });
+    if (this.bookmark.modifiable) {
+      this.contextMenuOptions.push({ id: 'editFolder', text: 'Edit Folder' });
+      this.contextMenuOptions.push({ id: 'deleteFolder', text: 'Delete Folder' });
+    }
+
   }
 
   public toggleState(): void {
     this.state = (this.state === 'open') ? 'closed' : 'open';
     this.cd.detectChanges();
+  }
+
+  public triggerContextMenu(ev: MouseEvent): void {
+    this.contextMenu.open(ev);
+  }
+
+  public contextItemSelected(id: string): void {
+    console.log("item selected", id); // TODO
   }
 
 }
