@@ -1,6 +1,15 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 html, body {  
   position: initial !important;
 }
 
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-form-field {
+  font-size: 14px;
+}
+
+.mat-form-full {
+  width: 100%;
+}
