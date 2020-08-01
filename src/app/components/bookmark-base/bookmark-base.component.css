@@ -1,8 +1,8 @@
 .bookmark {
   width: 100%;
   position: relative;
-  left: -8px;
-  padding: 8px 6px;
+  left: -.75em;
+  padding: .75em .5em;
   cursor: pointer;
   user-select: none;
 }
@@ -22,7 +22,7 @@
 
   position: relative;
   vertical-align: middle;
-  left: 6px;
+  left: .5em;
 
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;

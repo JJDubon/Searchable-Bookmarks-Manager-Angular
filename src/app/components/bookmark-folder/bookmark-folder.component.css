@@ -1,5 +1,5 @@
 .folder-list {
-  padding-left: 8px;
+  padding-left: .75em;
   border-left: 2px solid #E1E2E1;
   transition: all 150ms ease-in-out;
   transform-origin: top left;
