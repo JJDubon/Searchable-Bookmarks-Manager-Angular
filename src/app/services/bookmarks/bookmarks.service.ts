@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AsyncSubject, Subject } from 'rxjs';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
+import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
 
 @Injectable({
@@ -49,6 +50,21 @@ export class BookmarksService {
           parent.children = parent.children.filter(x => x !== id);
           this.bookmarkChanged$.next(parent);
         }
+
+      });
+
+      // Update the "title" and "url" field in response to the api's change event
+      this.chromeExtensionBridge.onBookmarkChanged$.subscribe(({id, title, url}) => {
+
+        const bookmark = this.bookmarksMap[id];
+        if (bookmark instanceof BookmarkLinkModel) {
+          bookmark.title = title;
+          bookmark.url = url;
+        } else {
+          bookmark.title = title;
+        }
+
+        this.bookmarkChanged$.next(bookmark);
 
       });
 
