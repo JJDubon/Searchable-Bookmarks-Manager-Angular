@@ -2,17 +2,13 @@
   width: 100%;
   position: relative;
   left: -8px;
-  padding: 8px 6px;
+  padding: 10px 6px;
   cursor: pointer;
   user-select: none;
 }
 
 .bookmark:hover {
-  background-color: #e3f2fd;
-}
-
-.bookmark:active {
-  background-color: #f2faff;
+  background-color: rgb(233, 233, 233);
 }
 
 .bookmark > .bookmark-icon {
@@ -23,7 +19,13 @@
 }
 
 .bookmark > .bookmark-title {
+
   position: relative;
   vertical-align: middle;
   left: 6px;
+
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+
 }
