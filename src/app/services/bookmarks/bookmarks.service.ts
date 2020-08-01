@@ -26,10 +26,19 @@ export class BookmarksService {
     // Retrieve the bookmarks tree from the chrome extension api
     this.chromeExtensionBridge.readBookmarksTree().subscribe(({ bookmarks, topLevelIds }) => {
 
+      // Populate the service's member
       this.topLevelIds = topLevelIds;
       this.bookmarksMap = {};
       bookmarks.forEach(b => {
         this.bookmarksMap[b.id] = b;
+      });
+
+      // Add in a dummy node for accessing the bookmarks manager
+      this.topLevelIds.push('__bookmark-manager');
+      this.bookmarksMap['__bookmark-manager'] = new BookmarkLinkModel({
+        id: '__bookmark-manager',
+        title: 'Bookmarks Manager',
+        unmodifiable: true
       });
 
       // Mark this service as initialized

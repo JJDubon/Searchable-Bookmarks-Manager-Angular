@@ -5,7 +5,6 @@ import { BookmarkTypes } from "./bookmark-types.model";
 export class BookmarkFolderModel extends BookmarkBaseModel {
 
   public children: string[];
-  public modifiable = true;
   public readonly type = BookmarkTypes.Folder;
 
   constructor(node: chrome.bookmarks.BookmarkTreeNode) {

@@ -38,8 +38,10 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
     this.contextMenuOptions.push({ id: 'openNewTab', text: 'Open in New Tab' });
     this.contextMenuOptions.push({ id: 'openNewWindow', text: 'Open in New Window' });
     this.contextMenuOptions.push({ id: 'openNewIWindow', text: 'Open in New Incognito Window' });
-    this.contextMenuOptions.push({ id: 'editBookmark', text: 'Edit Bookmark' });
-    this.contextMenuOptions.push({ id: 'deleteBookmark', text: 'Delete Bookmark' });
+    if (this.bookmark.modifiable) {
+      this.contextMenuOptions.push({ id: 'editBookmark', text: 'Edit Bookmark' });
+      this.contextMenuOptions.push({ id: 'deleteBookmark', text: 'Delete Bookmark' });
+    }
 
   }
 
