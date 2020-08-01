@@ -1,10 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, NgZone, ApplicationRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/context-menu.component';
+import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog/bookmark-folder-edit-dialog.component';
 
 @Component({
   selector: 'app-bookmark-folder',
@@ -40,7 +42,11 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   public state: 'open' | 'closed' = this.defaultState;
   public contextMenuOptions: ContextMenuItem[];
 
-  constructor(private cd: ChangeDetectorRef, private bookmarksService: BookmarksService) { 
+  constructor(
+    private cd: ChangeDetectorRef, 
+    private zone: NgZone,
+    private dialog: MatDialog, 
+    private bookmarksService: BookmarksService) { 
     super();
   }
 
@@ -55,12 +61,14 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
     // Determine which context menu options this folder will display
     this.contextMenuOptions = [];
-    this.contextMenuOptions.push({ id: 'newFolder', text: 'New Folder' });
-    this.contextMenuOptions.push({ id: 'newBookmark', text: 'New Bookmark' });
+    this.contextMenuOptions.push({ id: 'addFolder', text: 'Add Folder' });
+    this.contextMenuOptions.push({ id: 'addBookmark', text: 'Add Bookmark' });
     if (this.bookmark.modifiable) {
       this.contextMenuOptions.push({ id: 'editFolder', text: 'Edit Folder' });
       this.contextMenuOptions.push({ id: 'deleteFolder', text: 'Delete Folder' });
     }
+
+    console.log('test', this.bookmark);
 
   }
 
@@ -74,7 +82,31 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   }
 
   public contextItemSelected(id: string): void {
-    console.log("item selected", id); // TODO
+    this.zone.run(() => {
+
+      switch (id) {
+        case 'editFolder':
+          this.openEditDialog();
+          break;
+      }
+
+    });
+  }
+
+  private openEditDialog() {
+    const dialogRef = this.dialog.open(BookmarkFolderEditDialogComponent, {
+      width: '320px',
+      autoFocus: true,
+      data: { title: this.bookmark.title }
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { title: string, action: string }) => {
+      if (result.action === 'delete') {
+        this.bookmarksService.removeFolder(this.bookmark.id);
+      } else if (result.action === 'save') {
+        this.bookmarksService.updateBookmark(this.bookmark.id, { title: result.title });
+      }
+    });
   }
 
 }

@@ -57,6 +57,18 @@ export class BookmarksService {
     return this.bookmarksMap[id];
   }
 
+  public updateBookmark(id: string, updateInfo: Partial<{title: string, url: string}>): void {
+    this.chromeExtensionBridge.updateBookmark(id, updateInfo);
+  }
+
+  public removeBookmark(id: string): void {
+    this.chromeExtensionBridge.removeBookmark(id);
+  }
+
+  public removeFolder(id: string): void {
+    this.chromeExtensionBridge.removeFolder(id);
+  }
+
   private createListeners(): void {
 
     // Add a bookmark to the map when a bookmark is created

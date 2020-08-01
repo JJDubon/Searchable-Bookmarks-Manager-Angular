@@ -6,7 +6,7 @@ export class BookmarkBaseModel {
   public id: string;
   public parentId: string;
   public title: string;
-  public modifiable = true;
+  public modifiable: boolean;
   public readonly type: BookmarkTypes;
 
   constructor(node: chrome.bookmarks.BookmarkTreeNode) {

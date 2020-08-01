@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Edit Folder?</h2>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Folder Name</mat-label>
+    <input matInput type="text" [(ngModel)]="data.title">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submit({ 'title': data.title, 'action': 'delete' })">Delete</button>
+  <button mat-button (click)="submit({ 'title': data.title, 'action': 'save' })" cdkFocusInitial>Save</button>
+</div>

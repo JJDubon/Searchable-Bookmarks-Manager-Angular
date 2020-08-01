@@ -41,16 +41,16 @@ export class ChromeExtensionBridgeService {
         tree.forEach(topLevelNode => {
           topLevelNode.children.forEach(managerNode => {
 
-            // Convert the node to a model
-            const managerModel = new BookmarkFolderModel(managerNode);
-            managerModel.modifiable = false;
-
             // Store the top level nodes (manager nodes) as access-points into the tree
-            topLevelIds.push(managerModel.id);
+            topLevelIds.push(managerNode.id);
 
             // Iterate over the tree and store each child node
             walkTree(managerNode, (node) => {
               const model = nodeToModel(node);
+              if (model.id === managerNode.id) {
+                model.modifiable = false;
+              }
+
               bookmarks.push(model);
             });
 
@@ -75,6 +75,18 @@ export class ChromeExtensionBridgeService {
       });
     });
 
+  }
+
+  public updateBookmark(id: string, updateInfo: Partial<{ title: string; url: string; }>): void {
+    chrome.bookmarks.update(id, updateInfo);
+  }
+
+  public removeBookmark(id: string) {
+    chrome.bookmarks.remove(id);
+  }
+
+  public removeFolder(id: string) {
+    chrome.bookmarks.removeTree(id);
   }
 
 }
