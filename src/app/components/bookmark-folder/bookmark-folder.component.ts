@@ -84,6 +84,12 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     this.zone.run(() => {
 
       switch (id) {
+        case 'addFolder':
+          // TODO
+          break;
+        case 'addBookmark':
+          // TODO
+          break;
         case 'deleteFolder':
           this.openDeleteDialog();
           break;

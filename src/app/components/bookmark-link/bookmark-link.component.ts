@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, NgZone } from '@angular/core';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
@@ -19,7 +19,7 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   public bookmark: BookmarkLinkModel;
   public contextMenuOptions: ContextMenuItem[];
 
-  constructor(private cd: ChangeDetectorRef, private bookmarksService: BookmarksService) {
+  constructor(private cd: ChangeDetectorRef, private zone: NgZone, private bookmarksService: BookmarksService) {
     super();
   }
 
@@ -50,7 +50,30 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   }
 
   public contextItemSelected(id: string): void {
-    console.log("item selected", id); // TODO
+    this.zone.run(() => {
+
+      switch (id) {
+        case 'openCurrentTab':
+          // TODO
+          break;
+        case 'openNewTab':
+          // TODO
+          break;
+        case 'openNewWindow':
+          // TODO
+          break;
+        case 'openNewIWindow':
+          // TODO
+          break;
+        case 'editBookmark':
+          // TODO
+          break;
+        case 'deleteBookmark':
+          // TODO
+          break;
+      }
+
+    });
   }
 
 }
