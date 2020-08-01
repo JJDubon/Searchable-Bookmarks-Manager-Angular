@@ -1,11 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, NgZone, ApplicationRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/context-menu.component';
+import { BookmarkFolderDeleteDialogComponent } from './bookmark-folder-delete-dialog/bookmark-folder-delete-dialog.component';
 import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog/bookmark-folder-edit-dialog.component';
 
 @Component({
@@ -68,8 +69,6 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
       this.contextMenuOptions.push({ id: 'deleteFolder', text: 'Delete Folder' });
     }
 
-    console.log('test', this.bookmark);
-
   }
 
   public toggleState(): void {
@@ -85,11 +84,27 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     this.zone.run(() => {
 
       switch (id) {
+        case 'deleteFolder':
+          this.openDeleteDialog();
+          break;
         case 'editFolder':
           this.openEditDialog();
           break;
       }
 
+    });
+  }
+
+  private openDeleteDialog(): void {
+    const dialogRef = this.dialog.open(BookmarkFolderDeleteDialogComponent, {
+      width: '320px',
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { delete: boolean }) => {
+      if (result.delete === true) {
+        this.bookmarksService.removeFolder(this.bookmark.id);
+      }
     });
   }
 

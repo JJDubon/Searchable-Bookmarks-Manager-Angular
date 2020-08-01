@@ -1,1 +1,8 @@
-<p>bookmark-folder-delete-dialog works!</p>
+<h2 mat-dialog-title>Delete Folder?</h2>
+<div mat-dialog-content>
+  This action cannot be reversed.
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submit({ 'delete': true })">Delete</button>
+</div>
