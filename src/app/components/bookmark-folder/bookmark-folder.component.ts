@@ -37,11 +37,10 @@ import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog
 export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
   @Input() public bookmarkId: string;
-  @Input() public defaultState: 'open' | 'closed' = 'open';
   @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
   public bookmark: BookmarkFolderModel;
-  public state: 'open' | 'closed' = this.defaultState;
+  public state: 'open' | 'closed' = 'closed';
   public contextMenuOptions: ContextMenuItem[];
 
   constructor(
@@ -61,6 +60,9 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
       this.bookmark = bookmark as BookmarkFolderModel;
       this.cd.detectChanges();
     });
+
+    // Set the default open/close state
+    this.state = this.bookmark.isOpen ? 'open' : 'closed';
 
     // Determine which context menu options this folder will display
     this.contextMenuOptions = [];

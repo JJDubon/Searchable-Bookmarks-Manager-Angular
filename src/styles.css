@@ -17,3 +17,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-form-full {
   width: 100%;
 }
+
+::-webkit-scrollbar {
+  transition: all 150ms ease-in-out;
+  width: 0.75em;;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 0.5em;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

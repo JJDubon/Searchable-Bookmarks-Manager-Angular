@@ -49,6 +49,7 @@ export class ChromeExtensionBridgeService {
               const model = nodeToModel(node);
               if (model.id === managerNode.id) {
                 model.modifiable = false;
+                (model as BookmarkFolderModel).isOpen = true;
               }
 
               bookmarks.push(model);
