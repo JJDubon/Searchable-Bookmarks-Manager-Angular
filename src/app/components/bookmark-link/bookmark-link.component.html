@@ -1,2 +1,1 @@
 <app-bookmark-base *ngIf="bookmark" [title]="bookmark.title" [icon]="bookmark.icon" [tooltip]="bookmark.url" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
-<app-context-menu [items]="contextMenuOptions" (onItemSelected)="contextItemSelected($event)"></app-context-menu>

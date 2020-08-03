@@ -4,8 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
+import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
 import { ComponentBase } from '../component-base';
-import { ContextMenuComponent, ContextMenuItem } from '../context-menu/context-menu.component';
+import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { BookmarkFolderDeleteDialogComponent } from './bookmark-folder-delete-dialog/bookmark-folder-delete-dialog.component';
 import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog/bookmark-folder-edit-dialog.component';
 
@@ -47,6 +48,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     private cd: ChangeDetectorRef, 
     private zone: NgZone,
     private dialog: MatDialog, 
+    private contextMenuService: ContextMenuService,
     private bookmarksService: BookmarksService) { 
     super();
   }
@@ -77,10 +79,13 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   }
 
   public triggerContextMenu(ev: MouseEvent): void {
-    this.contextMenu.open(ev);
+    ev.preventDefault();
+    this.contextMenuService.openContextMenu(this.contextMenuOptions).pipe(takeUntil(this.onDestroy$)).subscribe(selectedOptionId => {
+      this.contextItemSelected(selectedOptionId)
+    });
   }
 
-  public contextItemSelected(id: string): void {
+  private contextItemSelected(id: string): void {
     this.zone.run(() => {
 
       switch (id) {

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, NgZone } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
+import { ContextMenuService , ContextMenuItem} from 'src/app/services/context-menu/context-menu.service';
 import { ComponentBase } from '../component-base';
-import { ContextMenuComponent, ContextMenuItem } from '../context-menu/context-menu.component';
+import { ContextMenuComponent } from '../context-menu/context-menu.component';
 
 @Component({
   selector: 'app-bookmark-link',
@@ -19,7 +20,11 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   public bookmark: BookmarkLinkModel;
   public contextMenuOptions: ContextMenuItem[];
 
-  constructor(private cd: ChangeDetectorRef, private zone: NgZone, private bookmarksService: BookmarksService) {
+  constructor(
+    private cd: ChangeDetectorRef, 
+    private zone: NgZone, 
+    private contextMenuService: ContextMenuService,
+    private bookmarksService: BookmarksService) {
     super();
   }
 
@@ -46,10 +51,13 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   }
 
   public triggerContextMenu(ev: MouseEvent): void {
-    this.contextMenu.open(ev);
+    ev.preventDefault();
+    this.contextMenuService.openContextMenu(this.contextMenuOptions).pipe(takeUntil(this.onDestroy$)).subscribe(selectedOptionId => {
+      this.contextItemSelected(selectedOptionId)
+    });
   }
 
-  public contextItemSelected(id: string): void {
+  private contextItemSelected(id: string): void {
     this.zone.run(() => {
 
       switch (id) {

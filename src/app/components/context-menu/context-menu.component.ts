@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-
-export type ContextMenuItem = { id: string, text: string };
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ContextMenuItem, ContextMenuService } from '../../services/context-menu/context-menu.service';
+import { ComponentBase } from '../component-base';
 
 @Component({
   selector: 'app-context-menu',
@@ -9,31 +12,57 @@ export type ContextMenuItem = { id: string, text: string };
   styleUrls: ['./context-menu.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ContextMenuComponent implements OnInit {
+export class ContextMenuComponent extends ComponentBase implements OnInit {
 
-  @Input() public items: ContextMenuItem[];
-  @Output() public itemSelected = new EventEmitter<string>();
   @ViewChild(MatMenuTrigger) public menuTrigger: MatMenuTrigger;
 
-  public position: { x: number, y: number } = { x: 0, y: 0 };
+  public items: ContextMenuItem[];
   public isOpen = false;
-  public opening = true;
+  public isOpening = false;
+  public activeSubject: Subject<string>;
+  public activePosition: { x: number, y: number } = { x: 0, y: 0 };
+  public contextMenuPosition: { x: number, y: number } = { x: 0, y: 0 };
 
-  @HostListener("window:contextmenu") public onWindowContextMenu() { this.forceSingleContextMenu(); }
-  @HostListener("window:click") public onWindowClick() { this.forceSingleContextMenu(); }
-
-  constructor(private cd: ChangeDetectorRef) { }
-
-  ngOnInit(): void {
+  constructor(private cd: ChangeDetectorRef, @Inject(DOCUMENT) private document: any, private contextMenuService: ContextMenuService) {
+    super();
   }
 
-  public open(ev: MouseEvent): void {
-    
-    ev.preventDefault();
+  ngOnInit(): void {
+
+    // This context menu is opened through an observable attached to a service
+    this.contextMenuService.contextMenu$.pipe(takeUntil(this.onDestroy$)).subscribe(options => {
+
+      if (this.isOpen) {
+        this.close();
+      }
+
+      this.isOpening = true;
+      this.items = options.items;
+      this.activeSubject = options.response$;
+      this.open();
+
+    });
+
+    // Keep track of the mouse's position in the document
+    fromEvent(this.document, "mousemove").pipe(takeUntil(this.onDestroy$)).subscribe((ev: MouseEvent) => {
+      this.activePosition = { x: ev.clientX, y: ev.clientY };
+    });
+
+    // Close the context menu in response to a click event
+    fromEvent(this.document, "mouseup").pipe(takeUntil(this.onDestroy$)).subscribe(() => {
+      if (this.isOpening) {
+        this.isOpening = false;
+      } else if(this.isOpen) {
+        this.close();
+      }
+    });
+
+  }
+
+  private open(): void {
 
     this.isOpen = true;
-    this.opening = true;
-    this.position = { x: ev.clientX, y: ev.clientY };
+    this.contextMenuPosition = this.activePosition;
 
     this.cd.detectChanges();
     this.menuTrigger.menu.focusFirstItem('mouse');
@@ -42,22 +71,18 @@ export class ContextMenuComponent implements OnInit {
 
   }
 
-  public close(): void {
+  private close(): void {
+    this.isOpen = false;
     this.menuTrigger.closeMenu();
     this.cd.detectChanges();
   }
 
   public emitItemSelected(id: string): void {
-    this.itemSelected.emit(id);
-  }
-
-  private forceSingleContextMenu(): void {
-    if (this.isOpen && !this.opening) {
-      this.isOpen = false;
-      this.close();
+    if (this.activeSubject) {
+      this.activeSubject.next(id);
+      this.activeSubject.complete();
+      this.activeSubject = null;
     }
-
-    this.opening = false;
   }
 
 }
