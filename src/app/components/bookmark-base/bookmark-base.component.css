@@ -12,6 +12,7 @@
 }
 
 .bookmark > .bookmark-icon {
+  display: inline-block;
   position: relative;
   vertical-align: middle;
   height: 16px;
@@ -20,6 +21,12 @@
 
 .bookmark > .bookmark-title {
 
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 16px - 0.75em);
+  
   position: relative;
   vertical-align: middle;
   left: .5em;
