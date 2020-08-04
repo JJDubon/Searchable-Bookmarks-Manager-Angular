@@ -19,6 +19,7 @@ import { BookmarkLinkComponent } from './components/bookmark-link/bookmark-link.
 import { BookmarkListComponent } from './components/bookmark-list/bookmark-list.component';
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
 import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
+import { SearchFieldComponent } from './components/search-field/search-field.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
     BookmarkLinkEditDialogComponent,
     BookmarkLinkDeleteDialogComponent,
     BookmarkFolderEditDialogComponent,
-    BookmarkFolderDeleteDialogComponent
+    BookmarkFolderDeleteDialogComponent,
+    SearchFieldComponent
   ],
   imports: [
     BrowserModule,

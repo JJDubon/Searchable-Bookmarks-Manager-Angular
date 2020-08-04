@@ -4,7 +4,14 @@ html, body {
   position: initial !important;
 }
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html {
+  border-right: 0.25em solid #888;
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
 
 .mat-dialog-title {
   margin: 0 0 .5em
@@ -20,7 +27,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 ::-webkit-scrollbar {
   transition: all 150ms ease-in-out;
-  width: 0.75em;;
+  width: 0.35em;;
 }
 
 ::-webkit-scrollbar-track {
@@ -34,4 +41,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.has-overscroll {
+  border-right: 0 !important;
 }
