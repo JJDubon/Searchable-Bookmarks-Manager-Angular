@@ -7,6 +7,8 @@ import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
+import { BookmarkFolderAddFolderDialogComponent } from './bookmark-folder-add-folder-dialog/bookmark-folder-add-folder-dialog.component';
+import { BookmarkFolderAddLinkDialogComponent } from './bookmark-folder-add-link-dialog/bookmark-folder-add-link-dialog.component';
 import { BookmarkFolderDeleteDialogComponent } from './bookmark-folder-delete-dialog/bookmark-folder-delete-dialog.component';
 import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog/bookmark-folder-edit-dialog.component';
 
@@ -92,10 +94,10 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
       switch (id) {
         case 'addFolder':
-          // TODO
+          this.addFolderDialog();
           break;
         case 'addBookmark':
-          // TODO
+          this.addBookmarkDialog();
           break;
         case 'deleteFolder':
           this.openDeleteDialog();
@@ -105,6 +107,34 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
           break;
       }
 
+    });
+  }
+
+  private addFolderDialog(): void {
+    const dialogRef = this.dialog.open(BookmarkFolderAddFolderDialogComponent, {
+      width: '320px',
+      autoFocus: true,
+      data: { title: '' }
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { title: string }) => {
+      if (result) {
+        this.bookmarksService.createBookmark(this.bookmark.id, result.title ?? '');
+      }
+    });
+  }
+
+  private addBookmarkDialog(): void {
+    const dialogRef = this.dialog.open(BookmarkFolderAddLinkDialogComponent, {
+      width: '320px',
+      autoFocus: true,
+      data: { title: '', url: '' }
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { title: string, url: string }) => {
+      if (result) {
+        this.bookmarksService.createBookmark(this.bookmark.id, result.title ?? '', result.url ?? '');
+      }
     });
   }
 

@@ -20,7 +20,7 @@ export class ChromeExtensionBridgeService {
   constructor() { 
 
     // Listen to event changes in the bookmarks tree and broadcast Rxjs subjects when they fire
-    chrome.bookmarks.onCreated.addListener((id, node) => this.onBookmarkCreated$.next({model: nodeToModel(node)}));
+    chrome.bookmarks.onCreated.addListener((id, node) => this.handleBookmarkCreated(node));
     chrome.bookmarks.onRemoved.addListener((id, info) => this.onBookmarkRemoved$.next({id, parentId: info.parentId}));
     chrome.bookmarks.onChanged.addListener((id, info) => this.onBookmarkChanged$.next({id, title: info.title, url: info.url}));
     chrome.bookmarks.onMoved.addListener((id, info) => this.onBookmarkMoved$.next({id, ...info}));
@@ -78,6 +78,14 @@ export class ChromeExtensionBridgeService {
 
   }
 
+  public createBookmark(parentId: string, title: string, url: string = null): void {
+    if (url) {
+      chrome.bookmarks.create({ parentId, title, url });
+    } else {
+      chrome.bookmarks.create({ parentId, title });
+    }
+  }
+
   public updateBookmark(id: string, updateInfo: Partial<{ title: string; url: string; }>): void {
     chrome.bookmarks.update(id, updateInfo);
   }
@@ -88,6 +96,24 @@ export class ChromeExtensionBridgeService {
 
   public removeFolder(id: string) {
     chrome.bookmarks.removeTree(id);
+  }
+
+  private handleBookmarkCreated(newNode: chrome.bookmarks.BookmarkTreeNode): void {
+
+    if (newNode.url !== null && newNode.url !== undefined) {
+      this.onBookmarkCreated$.next({ model: new BookmarkLinkModel(newNode) });
+    } else {
+
+      // This event may not have any child nodes for folders, force a full get here
+      chrome.bookmarks.getSubTree(newNode.id, ([nodeNodeFull]) => {
+        walkTree(nodeNodeFull, (childNode) => {
+          const model = nodeToModel(childNode);
+          this.onBookmarkCreated$.next({ model });
+        });
+      });
+
+    }
+
   }
 
 }

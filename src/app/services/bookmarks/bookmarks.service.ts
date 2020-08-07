@@ -57,6 +57,10 @@ export class BookmarksService {
     return this.bookmarksMap[id];
   }
 
+  public createBookmark(parentId: string, title: string, url: string = null): void {
+    this.chromeExtensionBridge.createBookmark(parentId, title, url);
+  }
+
   public updateBookmark(id: string, updateInfo: Partial<{title: string, url: string}>): void {
     this.chromeExtensionBridge.updateBookmark(id, updateInfo);
   }

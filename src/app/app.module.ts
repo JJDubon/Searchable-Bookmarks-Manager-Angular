@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -10,6 +10,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { BookmarkBaseComponent } from './components/bookmark-base/bookmark-base.component';
+import { BookmarkFolderAddFolderDialogComponent } from './components/bookmark-folder/bookmark-folder-add-folder-dialog/bookmark-folder-add-folder-dialog.component';
+import { BookmarkFolderAddLinkDialogComponent } from './components/bookmark-folder/bookmark-folder-add-link-dialog/bookmark-folder-add-link-dialog.component';
 import { BookmarkFolderDeleteDialogComponent } from './components/bookmark-folder/bookmark-folder-delete-dialog/bookmark-folder-delete-dialog.component';
 import { BookmarkFolderEditDialogComponent } from './components/bookmark-folder/bookmark-folder-edit-dialog/bookmark-folder-edit-dialog.component';
 import { BookmarkFolderComponent } from './components/bookmark-folder/bookmark-folder.component';
@@ -18,8 +20,8 @@ import { BookmarkLinkEditDialogComponent } from './components/bookmark-link/book
 import { BookmarkLinkComponent } from './components/bookmark-link/bookmark-link.component';
 import { BookmarkListComponent } from './components/bookmark-list/bookmark-list.component';
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
-import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
 import { SearchFieldComponent } from './components/search-field/search-field.component';
+import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
 
 @NgModule({
   declarations: [
@@ -34,12 +36,15 @@ import { SearchFieldComponent } from './components/search-field/search-field.com
     BookmarkLinkDeleteDialogComponent,
     BookmarkFolderEditDialogComponent,
     BookmarkFolderDeleteDialogComponent,
-    SearchFieldComponent
+    SearchFieldComponent,
+    BookmarkFolderAddFolderDialogComponent,
+    BookmarkFolderAddLinkDialogComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     MatMenuModule,
     MatRippleModule,
     MatDialogModule,

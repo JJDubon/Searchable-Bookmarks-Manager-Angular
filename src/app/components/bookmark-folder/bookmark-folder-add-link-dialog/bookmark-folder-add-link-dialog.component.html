@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Add Bookmark</h2>
+<div mat-dialog-content>
+  <form [formGroup]='formGroup'>
+    <mat-form-field class="mat-form-full" appearance="fill">
+      <mat-label>Bookmark Name</mat-label>
+      <input matInput type="text" formControlName="title">
+    </mat-form-field>
+    <mat-form-field class="mat-form-full" appearance="fill">
+      <mat-label>URL</mat-label>
+      <input matInput type="text" formControlName="url" required minlength="1">
+      <mat-error [hidden]="!(formGroup.controls.url.valid)">Invalid URL</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submit()" cdkFocusInitial>Add</button>
+</div>
