@@ -1,11 +1,15 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
+:root {
+  --scrollbar-width: 5px;
+}
+
 html, body {  
   position: initial !important;
 }
 
 html {
-  border-right: 0.25em solid #888;
+  border-right: var(--scrollbar-width) solid #888;
 }
 
 body { 
@@ -27,7 +31,7 @@ body {
 
 ::-webkit-scrollbar {
   transition: all 150ms ease-in-out;
-  width: 0.35em;;
+  width: var(--scrollbar-width);;
 }
 
 ::-webkit-scrollbar-track {
