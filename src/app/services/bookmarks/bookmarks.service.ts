@@ -73,6 +73,22 @@ export class BookmarksService {
     this.chromeExtensionBridge.removeFolder(id);
   }
 
+  public openInCurrentTab(link: BookmarkLinkModel): void {
+    this.chromeExtensionBridge.openInCurrentTab(link.url);
+  }
+
+  public openInNewTab(link: BookmarkLinkModel): void {
+    this.chromeExtensionBridge.openInNewTab(link.url);
+  }
+
+  public openInNewWindow(link: BookmarkLinkModel): void {
+    this.chromeExtensionBridge.openInNewWindow(link.url);
+  }
+
+  public openInNewIWindow(link: BookmarkLinkModel): void {
+    this.chromeExtensionBridge.openInNewIWindow(link.url);
+  }
+
   private createListeners(): void {
 
     // Add a bookmark to the map when a bookmark is created

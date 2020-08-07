@@ -90,12 +90,30 @@ export class ChromeExtensionBridgeService {
     chrome.bookmarks.update(id, updateInfo);
   }
 
-  public removeBookmark(id: string) {
+  public removeBookmark(id: string): void {
     chrome.bookmarks.remove(id);
   }
 
-  public removeFolder(id: string) {
+  public removeFolder(id: string): void {
     chrome.bookmarks.removeTree(id);
+  }
+
+  public openInCurrentTab(url: string): void {
+    chrome.tabs.getSelected(null, function(openWindow) {
+      chrome.tabs.update(openWindow.id, {active: true, url: String(url)});
+    });
+  }
+
+  public openInNewTab(url: string): void {
+    chrome.tabs.create({url: String(url), active: false});
+  }
+
+  public openInNewWindow(url: string): void {
+    chrome.windows.create({url: String(url), incognito: false});
+  }
+
+  public openInNewIWindow(url: string): void {
+    chrome.windows.create({url: String(url), incognito: true});
   }
 
   private handleBookmarkCreated(newNode: chrome.bookmarks.BookmarkTreeNode): void {

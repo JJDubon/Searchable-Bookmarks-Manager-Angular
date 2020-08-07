@@ -62,16 +62,16 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
 
       switch (id) {
         case 'openCurrentTab':
-          // TODO
+          this.bookmarksService.openInCurrentTab(this.bookmark);
           break;
         case 'openNewTab':
-          // TODO
+          this.bookmarksService.openInNewTab(this.bookmark);
           break;
         case 'openNewWindow':
-          // TODO
+          this.bookmarksService.openInNewWindow(this.bookmark);
           break;
         case 'openNewIWindow':
-          // TODO
+          this.bookmarksService.openInNewIWindow(this.bookmark);
           break;
         case 'editBookmark':
           // TODO
