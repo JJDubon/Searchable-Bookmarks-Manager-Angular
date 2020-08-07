@@ -44,6 +44,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   public bookmark: BookmarkFolderModel;
   public state: 'open' | 'closed' = 'closed';
   public contextMenuOptions: ContextMenuItem[];
+  public visible = true;
 
   constructor(
     private cd: ChangeDetectorRef, 
@@ -65,6 +66,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
     // Set the default open/close state
     this.state = this.bookmark.isOpen ? 'open' : 'closed';
+    this.visible = this.bookmark.isOpen;
 
     // Determine which context menu options this folder will display
     this.contextMenuOptions = [];
@@ -79,7 +81,18 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
   public toggleState(): void {
     this.state = (this.state === 'open') ? 'closed' : 'open';
+    if (this.state === 'open') {
+      this.visible = true;
+    }
+
     this.cd.detectChanges();
+  }
+
+  public onAnimationDone(): void {
+    if (this.state === 'closed') {
+      this.visible = false;
+      this.cd.detectChanges();
+    }
   }
 
   public triggerContextMenu(ev: MouseEvent): void {

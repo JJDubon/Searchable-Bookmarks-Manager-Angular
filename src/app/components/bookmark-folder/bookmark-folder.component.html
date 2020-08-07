@@ -1,6 +1,6 @@
 <div *ngIf="bookmark">
   <app-bookmark-base [title]="bookmark.title" icon="/assets/images/folder.svg" (click)="toggleState()" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
-  <div [@toggle]="state" class="folder-list">
-    <app-bookmark-list [bookmarkIds]="bookmark.children"></app-bookmark-list>
+  <div [@toggle]="state" (@toggle.done)="onAnimationDone()" class="folder-list">
+    <app-bookmark-list *ngIf="visible" [bookmarkIds]="bookmark.children"></app-bookmark-list>
   </div>
 </div>
