@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-bookmark-folder-add-link-dialog',
@@ -17,8 +17,8 @@ export class BookmarkFolderAddLinkDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<BookmarkFolderAddLinkDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { title: string, url: string }) { 
       this.formGroup = new FormGroup({
-        url: new FormControl(data.title ?? ''),
-        title: new FormControl(data.url ?? '')
+        title: new FormControl(data.title ?? ''),
+        url: new FormControl(data.url ?? '')
       });
     }
 

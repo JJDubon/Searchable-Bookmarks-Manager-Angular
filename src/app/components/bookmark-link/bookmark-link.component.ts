@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
-import { ContextMenuService , ContextMenuItem} from 'src/app/services/context-menu/context-menu.service';
+import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
+import { BookmarkLinkDeleteDialogComponent } from './bookmark-link-delete-dialog/bookmark-link-delete-dialog.component';
+import { BookmarkLinkEditDialogComponent } from './bookmark-link-edit-dialog/bookmark-link-edit-dialog.component';
 
 @Component({
   selector: 'app-bookmark-link',
@@ -23,6 +26,7 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   constructor(
     private cd: ChangeDetectorRef, 
     private zone: NgZone, 
+    private dialog: MatDialog,
     private contextMenuService: ContextMenuService,
     private bookmarksService: BookmarksService) {
     super();
@@ -74,13 +78,42 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
           this.bookmarksService.openInNewIWindow(this.bookmark);
           break;
         case 'editBookmark':
-          // TODO
+          this.openEditDialog();
           break;
         case 'deleteBookmark':
-          // TODO
+          this.openDeleteDialog();
           break;
       }
 
+    });
+  }
+
+  private openDeleteDialog(): void {
+    const dialogRef = this.dialog.open(BookmarkLinkDeleteDialogComponent, {
+      width: '320px',
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { delete: boolean }) => {
+      if (result.delete === true) {
+        this.bookmarksService.removeFolder(this.bookmark.id);
+      }
+    });
+  }
+
+  private openEditDialog() {
+    const dialogRef = this.dialog.open(BookmarkLinkEditDialogComponent, {
+      width: '320px',
+      autoFocus: true,
+      data: { title: this.bookmark.title, url: this.bookmark.url }
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { title: string, url: string, action: string }) => {
+      if (result.action === 'delete') {
+        this.bookmarksService.removeBookmark(this.bookmark.id);
+      } else if (result.action === 'save') {
+        this.bookmarksService.updateBookmark(this.bookmark.id, { title: result.title, url: result.url });
+      }
     });
   }
 

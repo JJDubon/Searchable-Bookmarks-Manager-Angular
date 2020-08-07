@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-bookmark-link-delete-dialog',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookmarkLinkDeleteDialogComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public dialogRef: MatDialogRef<BookmarkLinkDeleteDialogComponent>) { }
 
   ngOnInit(): void {
+  }
+
+  public submit(result: { title: string, action: string }): void {
+    this.dialogRef.close(result);
   }
 
 }
