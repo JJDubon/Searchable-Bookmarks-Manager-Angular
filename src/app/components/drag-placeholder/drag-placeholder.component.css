@@ -1,0 +1,7 @@
+.drag-wrapper {
+  position: fixed;
+  z-index: 1000;
+  width: calc(100% - 2.75em);
+  background-color: white;
+  box-shadow: 0px 0px 10px gray;
+}

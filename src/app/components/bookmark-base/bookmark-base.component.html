@@ -1,4 +1,4 @@
-<div class="bookmark" [attr.title]="tooltip" matRipple>
+<div #wrapper matRipple class="bookmark" [attr.title]="tooltip" (click)="emitClick()" (mousedown)="onDragStart($event, wrapper)" (dragover)="onDragOver($event, wrapper)">
   <img *ngIf="icon" class="bookmark-icon" [attr.src]="icon | allowUnsafe">
   <span class="bookmark-title">{{title}}</span>
 </div>

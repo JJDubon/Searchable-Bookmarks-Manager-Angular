@@ -4,7 +4,6 @@
   left: -.75em;
   padding: .75em .5em;
   cursor: pointer;
-  user-select: none;
 }
 
 .bookmark:hover {
@@ -17,6 +16,7 @@
   vertical-align: middle;
   height: 16px;
   width: 16px;
+  user-select: none;
 }
 
 .bookmark > .bookmark-title {
@@ -26,6 +26,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 16px - 0.75em);
+  user-select: none;
   
   position: relative;
   vertical-align: middle;

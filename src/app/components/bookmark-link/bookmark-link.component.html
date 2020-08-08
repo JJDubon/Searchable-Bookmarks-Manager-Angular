@@ -1,1 +1,1 @@
-<app-bookmark-base *ngIf="bookmark" [title]="bookmark.title" [icon]="bookmark.icon" [tooltip]="bookmark.url" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
+<app-bookmark-base *ngIf="bookmark" [id]="bookmark.id" [title]="bookmark.title" [icon]="bookmark.icon" [tooltip]="bookmark.url" [allowDrag]="bookmark.modifiable" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
