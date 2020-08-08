@@ -1,1 +1,4 @@
-<app-bookmark-base *ngIf="bookmark" [id]="bookmark.id" [title]="bookmark.title" [icon]="bookmark.icon" [tooltip]="bookmark.url" [allowDrag]="bookmark.modifiable" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
+<div [ngStyle]="{ 'opacity': dragging ? '0.5' : '1' }">
+  <app-bookmark-base *ngIf="bookmark" [id]="bookmark.id" [title]="bookmark.title" [icon]="bookmark.icon" [tooltip]="bookmark.url" [allowDrag]="bookmark.modifiable" 
+                     (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
+</div>

@@ -15,6 +15,7 @@ export class DragService {
   constructor() { }
 
   public emitHoverEvent(id: string, position: 'higher' | 'lower'): void {
+    console.log("test", { id, position });
     this.hoverEvent$.next({ id, position });
   }
 

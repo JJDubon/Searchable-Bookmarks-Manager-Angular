@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { fromEvent } from 'rxjs';
-import { takeUntil, first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
@@ -33,11 +33,11 @@ export class DragPlaceholderComponent extends ComponentBase implements OnInit {
 
         this.dragTarget = this.bookmarksService.getBookmark(target.id);
         this.dragOffset = target.yOffset;
-        this.dragTargetIcon = target instanceof BookmarkLinkModel ? 
-          (this.dragTarget as BookmarkLinkModel).icon : '/assets/images/folder.svg'
+        this.dragTargetIcon = (this.dragTarget as BookmarkLinkModel)?.url ? (this.dragTarget as BookmarkLinkModel).icon : '/assets/images/folder.svg'
 
         fromEvent(window, 'mouseup').pipe(first()).subscribe(() => {
           this.dragTarget = null;
+          this.dragService.emitDragEnd();
           this.cd.detectChanges();
         });
 
@@ -45,7 +45,7 @@ export class DragPlaceholderComponent extends ComponentBase implements OnInit {
         this.dragTarget = null;
       }
 
-      this.cd.markForCheck();
+      this.cd.detectChanges();
 
     });
 
@@ -53,7 +53,7 @@ export class DragPlaceholderComponent extends ComponentBase implements OnInit {
     fromEvent(window, "mousemove").pipe(takeUntil(this.onDestroy$)).subscribe((ev: MouseEvent) => {
       this.yPosition = ev.clientY;
       if (this.dragTarget) {
-        this.cd.markForCheck();
+        this.cd.detectChanges();
       }
     });
 

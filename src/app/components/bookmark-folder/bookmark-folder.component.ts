@@ -5,6 +5,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
+import { DragService } from 'src/app/services/drag/drag.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { BookmarkFolderAddFolderDialogComponent } from './bookmark-folder-add-folder-dialog/bookmark-folder-add-folder-dialog.component';
@@ -45,11 +46,13 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   public state: 'open' | 'closed' = 'closed';
   public contextMenuOptions: ContextMenuItem[];
   public visible = true;
+  public dragging = false;
 
   constructor(
     private cd: ChangeDetectorRef, 
     private zone: NgZone,
     private dialog: MatDialog, 
+    private dragService: DragService,
     private contextMenuService: ContextMenuService,
     private bookmarksService: BookmarksService) { 
     super();
@@ -62,6 +65,17 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     this.bookmarksService.bookmarkChanged$.pipe(filter(b => b.id === this.bookmark.id)).pipe(takeUntil(this.onDestroy$)).subscribe(bookmark => {
       this.bookmark = bookmark as BookmarkFolderModel;
       this.cd.detectChanges();
+    });
+
+    // Fade on drag start
+    this.dragService.dragTarget$.pipe(takeUntil(this.onDestroy$)).subscribe((target) => {
+      if (target == null && this.dragging) {
+        this.dragging = false;
+        this.cd.detectChanges();
+      } else if (target?.id === this.bookmark.id) {
+        this.dragging = true;
+        this.cd.detectChanges();
+      }
     });
 
     // Set the default open/close state

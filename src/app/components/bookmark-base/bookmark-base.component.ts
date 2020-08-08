@@ -48,7 +48,7 @@ export class BookmarkBaseComponent implements OnInit {
 
         this.clickTimeout = null;
 
-      }, 100);
+      }, 125);
 
     }
   }
