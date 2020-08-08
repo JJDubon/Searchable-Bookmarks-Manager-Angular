@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { fromEvent } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { DragService } from '../../services/drag/drag.service';
 
 @Component({
@@ -16,7 +18,9 @@ export class BookmarkBaseComponent implements OnInit {
   @Input() public allowDrag = true;
   @Output() public selected = new EventEmitter<void>();
 
-  private clickTimeout: any;
+  private mouseIsDown = false;
+  private dragging = false;
+  private dragOffset: number;
 
   constructor(private dragService: DragService) { }
 
@@ -24,46 +28,50 @@ export class BookmarkBaseComponent implements OnInit {
   }
 
   public emitClick(): void {
-    
-    if (this.clickTimeout) {
-      clearTimeout(this.clickTimeout);
-    }
-
+    this.mouseIsDown = false;
     this.selected.next();
-
   }
 
-  public onDragStart(ev: DragEvent, wrapper: HTMLDivElement): void {
+  public onMouseDown(ev: DragEvent, wrapper: HTMLDivElement): void {
 
     clearSelection();
-    if (this.allowDrag) {
-
-      this.clickTimeout= setTimeout(() => {
-
-        ev.stopPropagation();
-        ev.preventDefault();
-  
-        const offset = ev.clientY - wrapper.getBoundingClientRect().top;
-        this.dragService.emitDragStart(this.id, offset);
-
-        this.clickTimeout = null;
-
-      }, 125);
-
-    }
-  }
-
-  public onDragOver(ev: DragEvent, wrapper: HTMLDivElement): void {
 
     if (this.allowDrag) {
 
       ev.stopPropagation();
       ev.preventDefault();
+      this.mouseIsDown = true;
+      this.dragOffset = ev.clientY - wrapper.getBoundingClientRect().top;
 
-      const rect = wrapper.getBoundingClientRect();
-      const yPosition = ev.clientY;
-      const evPosition = (rect.top + rect.height/2) < yPosition ? 'lower' : 'higher';
-      this.dragService.emitHoverEvent(this.id, evPosition);
+      fromEvent(window, 'mouseup').pipe(first()).subscribe(() => {
+        this.mouseIsDown = false;
+      });
+
+    }
+
+  }
+
+  public onMouseMove(ev: DragEvent, wrapper: HTMLDivElement): void {
+
+    if (this.allowDrag && this.mouseIsDown && !this.dragging) {
+
+      ev.stopPropagation();
+      ev.preventDefault();
+
+      this.dragging = true;
+      this.dragService.emitDragStart(this.id, this.dragOffset);
+
+      fromEvent(window, 'mouseup').pipe(first()).subscribe(() => {
+        this.dragging = false;
+      });
+      
+    } else if (this.allowDrag && this.mouseIsDown && this.dragging) {
+
+      // TODO - Figure out hover
+      // const rect = wrapper.getBoundingClientRect();
+      // const yPosition = ev.clientY;
+      // const evPosition = (rect.top + rect.height/2) < yPosition ? 'lower' : 'higher';
+      // this.dragService.emitHoverEvent(this.id, evPosition);
 
     }
 

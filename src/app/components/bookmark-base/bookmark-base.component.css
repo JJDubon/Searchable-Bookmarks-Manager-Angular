@@ -6,7 +6,7 @@
   cursor: pointer;
 }
 
-.bookmark:hover {
+.bookmark:hover:not(.bookmark-not-draggable) {
   background-color: rgb(233, 233, 233);
 }
 
