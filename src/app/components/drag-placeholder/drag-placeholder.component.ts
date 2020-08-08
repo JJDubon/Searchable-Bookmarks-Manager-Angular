@@ -19,7 +19,7 @@ export class DragPlaceholderComponent extends ComponentBase implements OnInit {
   public dragTargetIcon: string;
   public dragOffset: number;
   public yPosition: number;
-  public yOffsetPadding = 4;
+  public yOffsetPadding = 6;
 
   constructor(private cd: ChangeDetectorRef, private bookmarksService: BookmarksService, private dragService: DragService) { 
     super();
