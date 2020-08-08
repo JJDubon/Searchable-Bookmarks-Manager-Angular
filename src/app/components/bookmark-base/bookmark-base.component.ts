@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DragService } from '../../services/drag/drag.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class BookmarkBaseComponent implements OnInit {
   @Input() public tooltip: string;
   @Input() public icon: string;
   @Input() public allowDrag = true;
+  @Output() public selected = new EventEmitter<void>();
 
   private clickTimeout: any;
 
@@ -28,7 +29,7 @@ export class BookmarkBaseComponent implements OnInit {
       clearTimeout(this.clickTimeout);
     }
 
-    console.log("bookmark clicked", this.id, this.title); // TODO
+    this.selected.next();
 
   }
 
