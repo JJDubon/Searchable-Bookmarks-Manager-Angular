@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 export type DragTarget = { id: string, yOffset: number };
 export type HoverEvent = { id: string, position: 'higher' | 'lower' };
+export type BookmarkPosition = { id: string, yStart: number, height: number };
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,27 @@ export class DragService {
 
   public dragTarget$ = new BehaviorSubject<DragTarget>(null);
   public hoverEvent$ = new Subject<HoverEvent>();
+  public bookmarkPositions$ = new BehaviorSubject<BookmarkPosition[]>([]);
 
-  constructor() { }
+  private positions = new Map<string, BookmarkPosition>();
+
+  constructor() {
+    
+  }
+
+  public registerBookmarkNode(id: string, yStart: number, height: number): void {
+    const pos = { id, yStart, height };
+    this.positions.set(id, pos);
+    this.bookmarkPositions$.next(Array.from(this.positions.values()));
+  }
+
+  public removeRegisteredNode(id: string): void {
+    this.positions.delete(id);
+    this.bookmarkPositions$.next(Array.from(this.positions.values()));
+  }
 
   public emitHoverEvent(id: string, position: 'higher' | 'lower'): void {
-    console.log("test", { id, position });
-    this.hoverEvent$.next({ id, position });
+    this.hoverEvent$.next({id, position});
   }
 
   public emitDragStart(id: string, yOffset: number): void {

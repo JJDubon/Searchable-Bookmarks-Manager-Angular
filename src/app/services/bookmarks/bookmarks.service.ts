@@ -89,6 +89,31 @@ export class BookmarksService {
     this.chromeExtensionBridge.openInNewIWindow(link.url);
   }
 
+  public idRepresentsChildOf(id: string, parentId: string): boolean {
+
+    // Return false if the ids match as a node is not a child of itself
+    if (id === parentId) {
+      return false;
+    }
+
+    // Iterate over parent nodes and return true if the parent node matches the given id
+    let target = id;
+    do {
+
+      let bookmark = this.bookmarksMap[target];
+      if (bookmark.id === parentId) {
+        return true;
+      } else {
+        target = bookmark.id;
+      }
+
+    } while (target != null);
+
+    // If this node is reached, return false
+    return false;
+
+  }
+
   private createListeners(): void {
 
     // Add a bookmark to the map when a bookmark is created

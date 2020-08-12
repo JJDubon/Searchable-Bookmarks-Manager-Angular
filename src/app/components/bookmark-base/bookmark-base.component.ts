@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { DragService } from '../../services/drag/drag.service';
@@ -9,7 +9,7 @@ import { DragService } from '../../services/drag/drag.service';
   styleUrls: ['./bookmark-base.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BookmarkBaseComponent implements OnInit {
+export class BookmarkBaseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() public id: string;
   @Input() public title: string;
@@ -17,6 +17,7 @@ export class BookmarkBaseComponent implements OnInit {
   @Input() public icon: string;
   @Input() public allowDrag = true;
   @Output() public selected = new EventEmitter<void>();
+  @ViewChild("wrapper") public wrapper: ElementRef;
 
   private mouseIsDown = false;
   private dragging = false;
@@ -25,6 +26,15 @@ export class BookmarkBaseComponent implements OnInit {
   constructor(private dragService: DragService) { }
 
   public ngOnInit(): void {
+  }
+
+  public ngAfterViewInit(): void {
+    const nodeRect = (this.wrapper.nativeElement as HTMLDivElement).getBoundingClientRect();
+    this.dragService.registerBookmarkNode(this.id, nodeRect.y, nodeRect.height);
+  }
+
+  public ngOnDestroy(): void {
+    this.dragService.removeRegisteredNode(this.id);
   }
 
   public emitClick(): void {
@@ -65,14 +75,6 @@ export class BookmarkBaseComponent implements OnInit {
         this.dragging = false;
       });
       
-    } else if (this.allowDrag && this.mouseIsDown && this.dragging) {
-
-      // TODO - Figure out hover
-      // const rect = wrapper.getBoundingClientRect();
-      // const yPosition = ev.clientY;
-      // const evPosition = (rect.top + rect.height/2) < yPosition ? 'lower' : 'higher';
-      // this.dragService.emitHoverEvent(this.id, evPosition);
-
     }
 
   }
