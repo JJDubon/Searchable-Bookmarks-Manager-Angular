@@ -26,12 +26,4 @@ export class BookmarkBaseComponent implements OnInit {
     this.selected.next();
   }
 
-  public onMouseDown(ev: DragEvent, wrapper: HTMLDivElement): void {
-    clearSelection();
-  }
-
-}
-
-function clearSelection(): void {
- if (window.getSelection) {window.getSelection().removeAllRanges();}
 }
