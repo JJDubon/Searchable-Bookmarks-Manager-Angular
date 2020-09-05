@@ -5,7 +5,6 @@
   <p *ngIf="!initialized">Loading...</p>
   <ng-container *ngIf="initialized">
     <app-bookmark-list [bookmarkIds]="topLevelIds"></app-bookmark-list>
-    <app-drag-placeholder></app-drag-placeholder>
   </ng-container>
 
   <p *ngIf="loadingError">Failed to load bookmarks. Please refresh this extension.</p>

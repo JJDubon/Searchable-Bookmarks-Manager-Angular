@@ -4,7 +4,6 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
-import { DragService } from 'src/app/services/drag/drag.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { BookmarkLinkDeleteDialogComponent } from './bookmark-link-delete-dialog/bookmark-link-delete-dialog.component';
@@ -23,13 +22,11 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
 
   public bookmark: BookmarkLinkModel;
   public contextMenuOptions: ContextMenuItem[];
-  public dragging = false;
 
   constructor(
     private cd: ChangeDetectorRef, 
     private zone: NgZone, 
     private dialog: MatDialog,
-    private dragService: DragService,
     private contextMenuService: ContextMenuService,
     private bookmarksService: BookmarksService) {
     super();
@@ -42,17 +39,6 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
     this.bookmarksService.bookmarkChanged$.pipe(filter(b => b.id === this.bookmark.id)).pipe(takeUntil(this.onDestroy$)).subscribe(bookmark => {
       this.bookmark = bookmark as BookmarkLinkModel;
       this.cd.detectChanges();
-    });
-
-    // Fade on drag start
-    this.dragService.dragTarget$.pipe(takeUntil(this.onDestroy$)).subscribe((target) => {
-      if (target == null && this.dragging) {
-        this.dragging = false;
-        this.cd.detectChanges();
-      } else if (target?.id === this.bookmark.id) {
-        this.dragging = true;
-        this.cd.detectChanges();
-      }
     });
 
     // Determine which context menu options this link will display

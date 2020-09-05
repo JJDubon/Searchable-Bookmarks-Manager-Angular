@@ -6,10 +6,6 @@
   cursor: pointer;
 }
 
-.bookmark:hover:not(.bookmark-not-draggable) {
-  background-color: rgb(233, 233, 233);
-}
-
 .bookmark > .bookmark-icon {
   display: inline-block;
   position: relative;

@@ -1,5 +1,5 @@
-<div *ngIf="bookmark" [ngStyle]="{ 'opacity': dragging ? '0.5' : '1' }">
-  <app-bookmark-base [id]="bookmark.id" [title]="bookmark.title" icon="/assets/images/folder.svg" (selected)="toggleState()" [allowDrag]="bookmark.modifiable" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
+<div *ngIf="bookmark">
+  <app-bookmark-base [id]="bookmark.id" [title]="bookmark.title" icon="/assets/images/folder.svg" (selected)="toggleState()" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
   <div [@toggle]="state" (@toggle.done)="onAnimationDone()" class="folder-list">
     <app-bookmark-list *ngIf="visible" [bookmarkIds]="bookmark.children"></app-bookmark-list>
   </div>

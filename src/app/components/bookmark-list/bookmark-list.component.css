@@ -8,5 +8,5 @@ ol {
 ol > li {
   list-style: none;
   list-style-type: none;
-  transition: all 150ms ease-in-out;
+  transition: all 100ms ease-in-out;
 }
