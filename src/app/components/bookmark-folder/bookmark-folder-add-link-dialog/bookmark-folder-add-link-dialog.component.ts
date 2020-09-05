@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 
 @Component({
   selector: 'app-bookmark-folder-add-link-dialog',
@@ -14,6 +15,7 @@ export class BookmarkFolderAddLinkDialogComponent implements OnInit {
 
   constructor(
     private cd: ChangeDetectorRef,
+    private bookmarksService: BookmarksService,
     private dialogRef: MatDialogRef<BookmarkFolderAddLinkDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { title: string, url: string }) { 
       this.formGroup = new FormGroup({
@@ -30,10 +32,7 @@ export class BookmarkFolderAddLinkDialogComponent implements OnInit {
     this.formGroup.updateValueAndValidity();
     if (this.formGroup.valid) {
       const result = { title: this.formGroup.value.title ?? '', url: this.formGroup.value.url ?? '' };
-      const hasValidHttpOrHttps = result.url.indexOf("http://") === 0 && result.url.indexOf("https://") === 0;
-      if (!hasValidHttpOrHttps) {
-        result.url = "http://" + result.url;
-      }
+      result.url = this.bookmarksService.cleanUrl(result.url);
 
       this.dialogRef.close(result);
     }

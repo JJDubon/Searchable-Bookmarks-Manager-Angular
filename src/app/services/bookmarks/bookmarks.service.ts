@@ -197,4 +197,19 @@ export class BookmarksService {
     
   }
 
+  public cleanUrl(url: string): string {
+
+    if (url === null) {
+      return '';
+    }
+
+    const hasValidHttpOrHttpsHeader = url.indexOf("http://") !== -1 && url.indexOf("https://")  !== -1;
+    if (!hasValidHttpOrHttpsHeader) {
+      url = `http://${url}`;
+    }
+
+    return url;
+
+  }
+
 }

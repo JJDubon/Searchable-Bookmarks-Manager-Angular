@@ -41,6 +41,7 @@ export class DragService {
 
   public emitDragEnd(): void {
     this.dragTarget$.next(null);
+    this.hoverEvent$.next(null);
   }
 
 }
