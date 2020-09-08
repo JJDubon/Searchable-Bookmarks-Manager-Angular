@@ -4,6 +4,7 @@
   left: -.75em;
   padding: .75em .5em;
   cursor: pointer;
+  transition: opacity 250ms ease;
 }
 
 .bookmark > .bookmark-icon {
