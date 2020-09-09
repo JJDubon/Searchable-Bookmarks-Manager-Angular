@@ -22,6 +22,7 @@ import { BookmarkListComponent } from './components/bookmark-list/bookmark-list.
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
 import { SearchFieldComponent } from './components/search-field/search-field.component';
 import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
+import { BookmarkDropPreviewComponent } from './components/bookmark-drop-preview/bookmark-drop-preview.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
     BookmarkFolderDeleteDialogComponent,
     SearchFieldComponent,
     BookmarkFolderAddFolderDialogComponent,
-    BookmarkFolderAddLinkDialogComponent
+    BookmarkFolderAddLinkDialogComponent,
+    BookmarkDropPreviewComponent
   ],
   imports: [
     BrowserModule,

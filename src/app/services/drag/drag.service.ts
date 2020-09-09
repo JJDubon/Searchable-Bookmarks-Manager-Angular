@@ -7,6 +7,7 @@ import { BookmarkTypes } from 'src/app/models/bookmark-types.model';
 import { BookmarksService } from '../bookmarks/bookmarks.service';
 
 export type HoverTargetTypes = 'top' | 'bottom' | 'inside';
+export type HoverTargetEvent = { id: string, type: HoverTargetTypes };
 export type DragEventTypes = 'dragstart' | 'dragend' | 'dragenter' | 'dragexit' | 'dragover';
 export type DragEventExt = DragEvent & { serviceEventType: DragEventTypes };
 
@@ -16,10 +17,10 @@ export type DragEventExt = DragEvent & { serviceEventType: DragEventTypes };
 export class DragService {
 
   public dragTarget$ = new BehaviorSubject<BookmarkBaseModel>(null);
-  public hoverTarget$ = new Subject<{ id: string, type: HoverTargetTypes }>();
+  public hoverTarget$ = new Subject<HoverTargetEvent>();
 
   private dragTarget: BookmarkBaseModel;
-  private hoverTarget: { id: string, type: HoverTargetTypes };
+  private hoverTarget: HoverTargetEvent;
 
   constructor(private bookmarkService: BookmarksService) {
 
@@ -68,16 +69,21 @@ export class DragService {
 
   private onDragStart(id: string, ev: DragEvent): void {
     ev.dataTransfer.setDragImage((ev.target as HTMLElement).querySelector('.bookmark-icon'), -8, -4);
-    window.requestAnimationFrame(() => { (ev.target as HTMLElement).style.opacity = '0' });
     this.dragTarget$.next(this.bookmarkService.getBookmark(id));
+    window.requestAnimationFrame(() => { 
+      (ev.target as HTMLElement).classList.add('hidden');
+    });
   }
 
   private onDragEnd(ev: DragEvent): void {
 
     // TODO - Handle drop using both the dragTarget and hoverTarget members
 
-    window.requestAnimationFrame(() => { (ev.target as HTMLElement).style.opacity = '1' });
     this.dragTarget$.next(null);
+    this.hoverTarget$.next(null);
+    window.requestAnimationFrame(() => { 
+      (ev.target as HTMLElement).classList.remove('hidden');
+    });
 
   }
 
@@ -90,10 +96,11 @@ export class DragService {
   }
 
   private onDragExit(): void {
-    this.hoverTarget$.next(null);
+    // this.hoverTarget$.next(null);
   }
 
   private determineHoverType(id: string, ev: DragEvent): void {
+
     const targetItem = this.bookmarkService.getBookmark(id);
     const targetRect = (ev.target as HTMLElement).getBoundingClientRect();
     const eventY = ev.y;
@@ -101,13 +108,14 @@ export class DragService {
     const isTopHalf = eventY < (targetRect.y + (targetRect.height/2));
     const isFolder = targetItem.type === BookmarkTypes.Folder;
     const isOpen = isFolder && (targetItem as BookmarkFolderModel).isOpen === true
-    if ((isFolder && isOpen) || (isFolder && isTopHalf)) {
+    if (isOpen && !isTopHalf) {
       this.hoverTarget$.next({ id, type: 'inside' });
     } else if (isTopHalf) {
       this.hoverTarget$.next({ id, type: 'top' });
     } else {
       this.hoverTarget$.next({ id, type: 'bottom' });
     }
+
   }
 
 }
@@ -116,10 +124,4 @@ function dragEvToExt(event: DragEvent, type: DragEventTypes): DragEventExt {
   const ext = event as DragEventExt;
   ext.serviceEventType = type;
   return ext;
-}
-
-function emptyImage(): HTMLImageElement {
-  const image = new Image();
-  image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
-  return image;
 }

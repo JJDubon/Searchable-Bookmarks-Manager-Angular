@@ -2,9 +2,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
+import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
+import { DragService, HoverTargetEvent } from 'src/app/services/drag/drag.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { BookmarkFolderAddFolderDialogComponent } from './bookmark-folder-add-folder-dialog/bookmark-folder-add-folder-dialog.component';
@@ -12,29 +14,30 @@ import { BookmarkFolderAddLinkDialogComponent } from './bookmark-folder-add-link
 import { BookmarkFolderDeleteDialogComponent } from './bookmark-folder-delete-dialog/bookmark-folder-delete-dialog.component';
 import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog/bookmark-folder-edit-dialog.component';
 
+const toggleAnimation =
+  trigger('toggle', [
+    state('open', style({
+      height: '*',
+      transform: 'scaleY(1)'
+    })),
+    state('closed', style({
+      height: '0px',
+      transform: 'scaleY(0)'
+    })),
+    transition('open => closed', [
+      animate('100ms ease-in-out')
+    ]),
+    transition('closed => open', [
+      animate('100ms ease-in-out')
+    ])
+  ]);
+
 @Component({
   selector: 'app-bookmark-folder',
   templateUrl: './bookmark-folder.component.html',
   styleUrls: ['./bookmark-folder.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('toggle', [
-      state('open', style({
-        height: '*',
-        transform: 'scaleY(1)'
-      })),
-      state('closed', style({
-        height: '0px',
-        transform: 'scaleY(0)'
-      })),
-      transition('open => closed', [
-        animate('100ms ease-in-out')
-      ]),
-      transition('closed => open', [
-        animate('100ms ease-in-out')
-      ])
-    ])
-  ]
+  animations: [toggleAnimation]
 })
 export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 

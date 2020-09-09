@@ -1,3 +1,7 @@
+.bookmark-folder {
+  transition: all 100ms ease-in-out;
+}
+
 .folder-list {
   padding-left: .75em;
   border-left: 2px solid #E1E2E1;

@@ -10,3 +10,7 @@ ol > li {
   list-style-type: none;
   transition: all 100ms ease-in-out;
 }
+
+.bookmark-drop-preview {
+  opacity: 0.5;
+}

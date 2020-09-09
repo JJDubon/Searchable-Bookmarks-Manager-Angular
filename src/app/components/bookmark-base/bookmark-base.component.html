@@ -1,4 +1,5 @@
-<div #wrapper matRipple class="bookmark" draggable="true" [attr.title]="tooltip" (mouseup)="emitClick()">
+<div #wrapper matRipple class="bookmark" [attr.draggable]="draggable" [attr.title]="tooltip" (mouseup)="emitClick()" 
+     [ngClass]="{ 'hover-inside': hoverTarget?.id == id && dragTarget?.id != id && hoverTarget?.type == 'inside' }">
   <img *ngIf="icon" class="bookmark-icon" [attr.src]="icon | allowUnsafe">
   <span class="bookmark-title">{{title}}</span>
 </div>

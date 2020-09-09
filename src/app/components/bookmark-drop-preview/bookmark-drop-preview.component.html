@@ -1,0 +1,4 @@
+<div *ngIf="dragTarget" class="bookmark-drop-preview-wrapper">
+  <app-bookmark-base *ngIf="dragTarget.type === BookmarkTypes.Folder" [id]="dragTarget.id" icon="/assets/images/folder.svg" [draggable]="false"></app-bookmark-base>
+  <app-bookmark-base *ngIf="dragTarget.type === BookmarkTypes.Link" [id]="dragTarget.id" [icon]="dragTarget.icon" [draggable]="false"></app-bookmark-base>
+</div>

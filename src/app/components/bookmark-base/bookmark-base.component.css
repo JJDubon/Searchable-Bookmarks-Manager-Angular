@@ -4,7 +4,7 @@
   left: -.75em;
   padding: .75em .5em;
   cursor: pointer;
-  transition: opacity 250ms ease;
+  transition: all 100ms ease;
 }
 
 .bookmark > .bookmark-icon {
@@ -33,4 +33,13 @@
   font-size: 14px;
   font-weight: 400;
 
+}
+
+.hidden {
+  background-color: lightgray;
+  opacity: 0.35;
+}
+
+.hover-inside {
+  background-color: lightgray;
 }
