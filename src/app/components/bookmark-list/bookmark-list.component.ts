@@ -16,11 +16,11 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     trigger('slide', [
       transition('* => void', [
         style({ height: '*' }),
-        animate(100, style({ height: 0 }))
+        animate(150, style({ height: 0 }))
       ]),
       transition('void => *', [
         style({ height: '0' }),
-        animate(100, style({ height: '*' }))
+        animate(150, style({ height: '*' }))
       ])
     ])
   ]

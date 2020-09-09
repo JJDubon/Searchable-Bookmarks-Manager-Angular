@@ -2,11 +2,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
-import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
-import { DragService, HoverTargetEvent } from 'src/app/services/drag/drag.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { BookmarkFolderAddFolderDialogComponent } from './bookmark-folder-add-folder-dialog/bookmark-folder-add-folder-dialog.component';
@@ -64,6 +62,11 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     this.bookmark = this.bookmarksService.getBookmark(this.bookmarkId) as BookmarkFolderModel;
     this.bookmarksService.bookmarkChanged$.pipe(filter(b => b.id === this.bookmark.id)).pipe(takeUntil(this.onDestroy$)).subscribe(bookmark => {
       this.bookmark = bookmark as BookmarkFolderModel;
+      this.state = this.bookmark.isOpen ? 'open' : 'closed';
+      if (this.state === 'open') {
+        this.visible = true;
+      }
+
       this.cd.detectChanges();
     });
 
@@ -83,12 +86,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   }
 
   public toggleState(): void {
-    this.state = (this.state === 'open') ? 'closed' : 'open';
-    if (this.state === 'open') {
-      this.visible = true;
-    }
-
-    this.cd.detectChanges();
+    this.bookmarksService.toggleFolderOpenOrClosed(this.bookmarkId);
   }
 
   public onAnimationDone(): void {

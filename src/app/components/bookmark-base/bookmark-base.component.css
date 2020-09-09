@@ -5,6 +5,7 @@
   padding: .75em .5em;
   cursor: pointer;
   transition: all 100ms ease;
+  box-sizing: border-box;
 }
 
 .bookmark > .bookmark-icon {

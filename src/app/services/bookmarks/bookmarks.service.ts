@@ -57,6 +57,12 @@ export class BookmarksService {
     return this.bookmarksMap[id];
   }
 
+  public toggleFolderOpenOrClosed(id: string): void {
+    const folder = this.bookmarksMap[id] as BookmarkFolderModel;
+    folder.isOpen = !folder.isOpen;
+    this.bookmarkChanged$.next(folder);
+  }
+
   public createBookmark(parentId: string, title: string, url: string = null): void {
     this.chromeExtensionBridge.createBookmark(parentId, title, url);
   }
