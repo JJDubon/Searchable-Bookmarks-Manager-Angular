@@ -1,21 +1,18 @@
 <ol>
   <li *ngFor="let bookmark of bookmarks; let i = index">
 
-    <ng-container *ngIf="i === 0 && hoverTarget?.id == bookmark.id && dragTarget?.id != bookmark.id && hoverTarget?.type == 'top'" 
-                  [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
+    <ng-container *ngIf="showDragTopPreview(i)" [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
 
     <app-bookmark-folder *ngIf="bookmark.type === BookmarkTypes.Folder" [bookmarkId]="bookmark.id"></app-bookmark-folder>
     <app-bookmark-link *ngIf="bookmark.type === BookmarkTypes.Link" [bookmarkId]="bookmark.id"></app-bookmark-link>
 
-    <ng-container *ngIf="(hoverTarget?.id == bookmark.id && dragTarget?.id != bookmark.id && hoverTarget?.type == 'bottom')
-                      || ((i + 1) !== bookmarks.length && hoverTarget?.id == bookmarks[i + 1].id && dragTarget?.id != bookmarks[i + 1].id && hoverTarget?.type == 'top')" 
-                  [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
+    <ng-container *ngIf="showDragBottomPreview(i)" [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
 
   </li>
 </ol>
 
 <ng-template #dropPreview let-bookmark="bookmark">
-  <div class="bookmark-drop-preview">
+  <div [@slide] class="bookmark-drop-preview">
     <app-bookmark-base [id]="bookmark.id" [title]="bookmark.title" [draggable]="false"
                        [icon]="bookmark.type === BookmarkTypes.Folder ? '/assets/images/folder.svg' : bookmark.icon"></app-bookmark-base>
   </div>

@@ -12,5 +12,8 @@ ol > li {
 }
 
 .bookmark-drop-preview {
+  overflow: hidden;
+  padding-left: 2rem; 
+  margin-left: -2rem;
   opacity: 0.5;
 }

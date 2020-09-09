@@ -5,12 +5,25 @@ import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { DragService, HoverTargetEvent } from 'src/app/services/drag/drag.service';
 import { ComponentBase } from '../component-base';
 import { takeUntil } from 'rxjs/operators';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-bookmark-list',
   templateUrl: './bookmark-list.component.html',
   styleUrls: ['./bookmark-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('slide', [
+      transition('* => void', [
+        style({ height: '*' }),
+        animate(100, style({ height: 0 }))
+      ]),
+      transition('void => *', [
+        style({ height: '0' }),
+        animate(100, style({ height: '*' }))
+      ])
+    ])
+  ]
 })
 export class BookmarkListComponent extends ComponentBase implements OnInit, OnChanges {
 
@@ -54,6 +67,39 @@ export class BookmarkListComponent extends ComponentBase implements OnInit, OnCh
   public loadBookmarks(): void {
     this.bookmarks = (this.bookmarkIds ?? []).map(id => this.bookmarksService.getBookmark(id));
     this.cd.detectChanges();
+  }
+
+  public showDragTopPreview(index: number): boolean {
+
+    if (index !== 0 || this.hoverTarget == null || this.dragTarget == null) {
+      return false;
+    }
+
+    const bookmarkIsHoverTarget = this.hoverTarget.id === this.bookmarks[index].id;
+    const bookmarkIsDragTarget = this.dragTarget.id  === this.bookmarks[index].id;
+    return bookmarkIsHoverTarget && !bookmarkIsDragTarget && this.hoverTarget.type === 'top';
+
+  }
+
+  public showDragBottomPreview(index: number): boolean {
+
+    if (this.hoverTarget == null || this.dragTarget == null) {
+      return false;
+    }
+
+    const bookmarkIsHoverTarget = this.hoverTarget.id === this.bookmarks[index].id;
+    const bookmarkIsDragTarget = this.dragTarget.id  === this.bookmarks[index].id;
+    const lastItemInList = (index + 1) === this.bookmarks.length;
+    const nextBookmarkIsHoverTarget = !lastItemInList && this.hoverTarget.id === this.bookmarks[index + 1].id;
+    const nextBookmarkIsDragTarget = !lastItemInList && this.dragTarget.id === this.bookmarks[index + 1].id;
+
+    if (bookmarkIsDragTarget || nextBookmarkIsDragTarget) {
+      return false;
+    }
+
+    return (bookmarkIsHoverTarget && this.hoverTarget.type === 'bottom')
+        || (nextBookmarkIsHoverTarget && this.hoverTarget.type === 'top');
+
   }
 
 }
