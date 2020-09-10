@@ -90,6 +90,10 @@ export class ChromeExtensionBridgeService {
     chrome.bookmarks.update(id, updateInfo);
   }
 
+  public moveBookmark(id: string, parentId: string, index: number): void {
+    chrome.bookmarks.move(id, { parentId, index });
+  }
+
   public removeBookmark(id: string): void {
     chrome.bookmarks.remove(id);
   }

@@ -85,13 +85,51 @@ export class DragService {
 
   private onDragEnd(ev: DragEvent): void {
 
-    // TODO - Handle drop using both the dragTarget and hoverTarget members
+    const dragTarget = this.dragTarget;
+    const hoverTarget = this.hoverTarget;
 
+    // Reset service and hidden dom elements
     this.dragTarget$.next(null);
     this.hoverTarget$.next(null);
     window.requestAnimationFrame(() => { 
       (ev.target as HTMLElement).classList.remove('hidden');
     });
+
+    // If there is a proper hover target, perform the drop logic
+    if (hoverTarget != null) {
+
+      const hoverTargetItem = this.bookmarkService.getBookmark(hoverTarget.id);
+      let parentFolder: BookmarkFolderModel = null;
+      let index = 0;
+
+      // Determine the parent the drag target will eventually get moved to
+      if (hoverTargetItem.type === BookmarkTypes.Link || hoverTarget.type !== 'inside') {
+
+        // Determine the drag target's new index just above or below the hover target
+        parentFolder = this.bookmarkService.getBookmark(hoverTargetItem.parentId) as BookmarkFolderModel;
+        if (hoverTarget.type === 'top') {
+          index = parentFolder.children.indexOf(hoverTargetItem.id);
+        } else {
+          index = parentFolder.children.indexOf(hoverTargetItem.id) + 1;
+        }
+
+      } else {
+
+        // Add the item as the first element in the list
+        parentFolder = hoverTargetItem as BookmarkFolderModel;
+        index = 0;
+
+      }
+
+      // Perform a final check to ensure a parent folder isn't being moved into it's own child list
+      if (parentFolder.id != dragTarget.id && !this.bookmarkService.idRepresentsChildOf(parentFolder.id, dragTarget.id)) {
+
+        // Pass the request to chrome's api
+        this.bookmarkService.moveBookmark(dragTarget.id, parentFolder.id, index);
+
+      }
+
+    }
 
   }
 

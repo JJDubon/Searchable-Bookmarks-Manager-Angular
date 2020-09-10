@@ -71,6 +71,10 @@ export class BookmarksService {
     this.chromeExtensionBridge.updateBookmark(id, updateInfo);
   }
 
+  public moveBookmark(id: string, parentId: string, index: number): void {
+    this.chromeExtensionBridge.moveBookmark(id, parentId, index);
+  }
+
   public removeBookmark(id: string): void {
     this.chromeExtensionBridge.removeBookmark(id);
   }
@@ -107,10 +111,12 @@ export class BookmarksService {
     do {
 
       let bookmark = this.bookmarksMap[target];
-      if (bookmark.id === parentId) {
+      if (bookmark == null) {
+        return false;
+      } else if (bookmark.id === parentId) {
         return true;
       } else {
-        target = bookmark.id;
+        target = bookmark.parentId;
       }
 
     } while (target != null);
