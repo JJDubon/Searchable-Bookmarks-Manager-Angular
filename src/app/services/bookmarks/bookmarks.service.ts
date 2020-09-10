@@ -38,6 +38,7 @@ export class BookmarksService {
       this.bookmarksMap['__bookmark-manager'] = new BookmarkLinkModel({
         id: '__bookmark-manager',
         title: 'Bookmarks Manager',
+        url: 'chrome://bookmarks/',
         unmodifiable: true
       });
 
