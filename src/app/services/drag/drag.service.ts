@@ -8,7 +8,7 @@ import { BookmarksService } from '../bookmarks/bookmarks.service';
 
 export type HoverTargetTypes = 'top' | 'bottom' | 'inside';
 export type HoverTargetEvent = { id: string, type: HoverTargetTypes };
-export type DragEventTypes = 'dragstart' | 'dragend' | 'dragenter' | 'dragexit' | 'dragover';
+export type DragEventTypes = 'dragstart' | 'dragend' | 'dragenter' | 'dragover';
 export type DragEventExt = DragEvent & { serviceEventType: DragEventTypes };
 
 @Injectable({
@@ -22,7 +22,7 @@ export class DragService {
   private dragTarget: BookmarkBaseModel;
   private hoverTarget: HoverTargetEvent;
 
-  constructor(private bookmarkService: BookmarksService) {
+  constructor(private bookmarkService: BookmarksService) { 
 
     this.dragTarget$.subscribe(target => {
       this.dragTarget = target;
@@ -31,7 +31,7 @@ export class DragService {
     this.hoverTarget$.subscribe(target => {
       this.hoverTarget = target;
     });
-
+  
   }
 
   public enableDrag(id: string, element: ElementRef<HTMLElement>): Subscription {
@@ -40,10 +40,9 @@ export class DragService {
     const dragEnd = fromEvent<DragEvent>(element.nativeElement, 'dragend').pipe(map(ev => dragEvToExt(ev, 'dragend')));
     const dragEnter = fromEvent<DragEvent>(element.nativeElement, 'dragenter').pipe(map(ev => dragEvToExt(ev, 'dragenter')));
     const dragOver = fromEvent<DragEvent>(element.nativeElement, 'dragover').pipe(map(ev => dragEvToExt(ev, 'dragover')));
-    const dragExit = fromEvent<DragEvent>(element.nativeElement, 'dragexit').pipe(map(ev => dragEvToExt(ev, 'dragexit')));
 
     // Combine drag events into one subscription so it can be easily removed from memory in the component that calls this method
-    return merge(dragStart, dragEnd, dragEnter, dragExit, dragOver).subscribe((event: DragEventExt) => {
+    return merge(dragStart, dragEnd, dragEnter, dragOver).subscribe((event: DragEventExt) => {
 
       switch (event.serviceEventType) {
         case 'dragstart':
@@ -58,9 +57,6 @@ export class DragService {
         case 'dragover':
           this.onDragOver(id, event);
           break;
-        case 'dragexit':
-          this.onDragExit();
-          break;
       }
 
     });
@@ -68,11 +64,23 @@ export class DragService {
   }
 
   private onDragStart(id: string, ev: DragEvent): void {
-    ev.dataTransfer.setDragImage((ev.target as HTMLElement).querySelector('.bookmark-icon'), -8, -4);
-    this.dragTarget$.next(this.bookmarkService.getBookmark(id));
-    window.requestAnimationFrame(() => { 
-      (ev.target as HTMLElement).classList.add('hidden');
-    });
+
+    const targetItem = this.bookmarkService.getBookmark(id);
+    if (targetItem.type === BookmarkTypes.Folder && !targetItem.modifiable) {
+
+      ev.preventDefault(); // Keep hover events, but do not allow unmodifiable folders to be dragged
+
+    } else {
+
+      // Set the drag image to be a representation of the dragged element, and hide the original element
+      ev.dataTransfer.setDragImage((ev.target as HTMLElement).querySelector('.bookmark-icon'), -8, -4);
+      this.dragTarget$.next(this.bookmarkService.getBookmark(id));
+      window.requestAnimationFrame(() => { 
+        (ev.target as HTMLElement).classList.add('hidden');
+      });
+
+    }
+
   }
 
   private onDragEnd(ev: DragEvent): void {
@@ -95,20 +103,17 @@ export class DragService {
     this.determineHoverType(id, ev);
   }
 
-  private onDragExit(): void {
-    // this.hoverTarget$.next(null);
-  }
-
   private determineHoverType(id: string, ev: DragEvent): void {
 
     const targetItem = this.bookmarkService.getBookmark(id);
     const targetRect = (ev.target as HTMLElement).getBoundingClientRect();
     const eventY = ev.y;
 
+    // Determine hover behavior
     const isTopHalf = eventY < (targetRect.y + (targetRect.height/2));
     const isFolder = targetItem.type === BookmarkTypes.Folder;
     const isOpen = isFolder && (targetItem as BookmarkFolderModel).isOpen === true
-    if (isOpen && !isTopHalf) {
+    if ( (isOpen && !isTopHalf) || (isFolder && !targetItem.modifiable) ) {
       this.hoverTarget$.next({ id, type: 'inside' });
     } else if (isTopHalf) {
       this.hoverTarget$.next({ id, type: 'top' });
