@@ -1,5 +1,5 @@
 <ol>
-  <li *ngFor="let bookmark of bookmarks; let i = index">
+  <li *ngFor="let bookmark of bookmarks; let i = index; trackBy: trackById">
 
     <ng-container *ngIf="showDragTopPreview(i)" [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
 

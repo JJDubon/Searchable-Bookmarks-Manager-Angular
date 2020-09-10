@@ -102,4 +102,8 @@ export class BookmarkListComponent extends ComponentBase implements OnInit, OnCh
 
   }
 
+  public trackById(index: number, bookmark: BookmarkBaseModel): string {
+    return index + bookmark.id;
+  }
+
 }
