@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AsyncSubject, Subject } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
@@ -12,9 +12,12 @@ export class BookmarksService {
 
   public initialized$ = new AsyncSubject<void>();
   public bookmarkChanged$ = new Subject<BookmarkBaseModel>();
+  public topLevelIds$ = new BehaviorSubject<string[]>([]);
 
   private bookmarksMap: { [id: string]: BookmarkBaseModel };
-  private topLevelIds: string[];
+  private managerNodeIds: string[];
+  private searchResultIds: string[];
+  private searchQuerySubscription: Subscription;
 
   constructor(private chromeExtensionBridge: ChromeExtensionBridgeService) { 
 
@@ -27,14 +30,14 @@ export class BookmarksService {
     this.chromeExtensionBridge.readBookmarksTree().subscribe(({ bookmarks, topLevelIds }) => {
 
       // Populate the service's member
-      this.topLevelIds = topLevelIds;
+      this.managerNodeIds = topLevelIds;
       this.bookmarksMap = {};
       bookmarks.forEach(b => {
         this.bookmarksMap[b.id] = b;
       });
 
       // Add in a dummy node for accessing the bookmarks manager
-      this.topLevelIds.push('__bookmark-manager');
+      this.managerNodeIds.push('__bookmark-manager');
       this.bookmarksMap['__bookmark-manager'] = new BookmarkLinkModel({
         id: '__bookmark-manager',
         title: 'Bookmarks Manager',
@@ -45,13 +48,12 @@ export class BookmarksService {
       // Mark this service as initialized
       this.initialized$.next();
       this.initialized$.complete();
+
+      // Update top level ids
+      this.topLevelIds$.next(this.managerNodeIds);
       
     });
 
-  }
-
-  public getTopLevelIds(): string[] {
-    return this.topLevelIds;
   }
 
   public getBookmark(id: string): BookmarkBaseModel {
@@ -82,6 +84,37 @@ export class BookmarksService {
 
   public removeFolder(id: string): void {
     this.chromeExtensionBridge.removeFolder(id);
+  }
+
+  public search(query: string): void {
+
+    // If a query is already running, forget it
+    if (this.searchQuerySubscription) {
+      this.searchQuerySubscription.unsubscribe();
+      this.searchQuerySubscription = null;
+    }
+
+    // Run the search
+    this.searchQuerySubscription = this.chromeExtensionBridge.search(query).subscribe(topLevelIds => {
+
+      this.searchResultIds = topLevelIds;
+      this.topLevelIds$.next(this.searchResultIds);
+      
+    });
+
+  }
+
+  public closeSearch(): void {
+
+    // If a query is already running, forget it
+    if (this.searchQuerySubscription) {
+      this.searchQuerySubscription.unsubscribe();
+      this.searchQuerySubscription = null;
+    }
+
+    this.searchResultIds = null;
+    this.topLevelIds$.next(this.managerNodeIds);
+    
   }
 
   public openInCurrentTab(link: BookmarkLinkModel): void {

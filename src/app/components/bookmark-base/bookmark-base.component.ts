@@ -51,7 +51,7 @@ export class BookmarkBaseComponent extends ComponentBase implements OnInit, Afte
 
   public ngAfterViewInit(): void {
     if (this.draggable) {
-      this.drag$ = this.dragService.enableDrag(this.id, this.wrapper);
+      this.drag$ = this.dragService.attachListeners(this.id, this.wrapper);
     }
   }
 

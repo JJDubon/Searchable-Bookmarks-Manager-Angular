@@ -19,6 +19,7 @@ export class DragService {
   public dragTarget$ = new BehaviorSubject<BookmarkBaseModel>(null);
   public hoverTarget$ = new Subject<HoverTargetEvent>();
 
+  private draggingEnabled = true;
   private dragTarget: BookmarkBaseModel;
   private hoverTarget: HoverTargetEvent;
 
@@ -34,7 +35,15 @@ export class DragService {
   
   }
 
-  public enableDrag(id: string, element: ElementRef<HTMLElement>): Subscription {
+  public enableDragging(): void {
+    this.draggingEnabled = true;
+  }
+
+  public disableDragging(): void {
+    this.draggingEnabled = false;
+  }
+
+  public attachListeners(id: string, element: ElementRef<HTMLElement>): Subscription {
 
     const dragStart = fromEvent<DragEvent>(element.nativeElement, 'dragstart').pipe(map(ev => dragEvToExt(ev, 'dragstart')));
     const dragEnd = fromEvent<DragEvent>(element.nativeElement, 'dragend').pipe(map(ev => dragEvToExt(ev, 'dragend')));
@@ -66,9 +75,11 @@ export class DragService {
   private onDragStart(id: string, ev: DragEvent): void {
 
     const targetItem = this.bookmarkService.getBookmark(id);
-    if (targetItem.type === BookmarkTypes.Folder && !targetItem.modifiable) {
 
-      ev.preventDefault(); // Keep hover events, but do not allow unmodifiable folders to be dragged
+    // If dragging is enabled or this even has taken place on an unmodifiable folder, suppress drag start
+    if (!this.draggingEnabled || !targetItem.modifiable) {
+
+      ev.preventDefault();
 
     } else {
 

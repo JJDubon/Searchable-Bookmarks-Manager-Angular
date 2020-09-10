@@ -4,6 +4,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentBase } from './components/component-base';
 import { BookmarksService } from './services/bookmarks/bookmarks.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +14,9 @@ import { BookmarksService } from './services/bookmarks/bookmarks.service';
 })
 export class AppComponent extends ComponentBase implements OnInit, AfterViewInit, OnDestroy {
 
-  public topLevelIds: string[] = [];
   public initialized = false;
   public loadingError = false;
+  public topLevelIds: string[] = [];
 
   private hasOverscroll = false;
   private overscrollObserver = new ResizeObserver(() => this.calcOverscroll());
@@ -31,14 +32,19 @@ export class AppComponent extends ComponentBase implements OnInit, AfterViewInit
     
     // When the bookmarks tree has initialized, read the ids of the highest level nodes ("Bookmarks Bar", "Other Bookmarks", etc...)
     this.bookmarksService.initialized$.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
-      this.topLevelIds = this.bookmarksService.getTopLevelIds();
       this.initialized = true;
       this.cd.detectChanges();
     }, error => {
       console.error(error);
       this.loadingError = true;
     });
-    
+
+    // Store the ids that are the entry point to the bookmarks tree
+    this.bookmarksService.topLevelIds$.pipe(takeUntil(this.onDestroy$)).subscribe(ids => {
+      this.topLevelIds = ids;
+      this.cd.detectChanges();
+    });
+
   }
 
   public ngAfterViewInit(): void {

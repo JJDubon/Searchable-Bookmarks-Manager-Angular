@@ -102,6 +102,16 @@ export class ChromeExtensionBridgeService {
     chrome.bookmarks.removeTree(id);
   }
 
+  public search(query: string): Observable<string[]> {
+    return new Observable(observer => {
+      chrome.bookmarks.search(query, (results) => {
+        results = results ?? [];
+        observer.next(results.map(x => x.id));
+        observer.complete();
+      });
+    });
+  }
+
   public openInCurrentTab(url: string): void {
     chrome.tabs.getSelected(null, function(openWindow) {
       chrome.tabs.update(openWindow.id, {active: true, url: String(url)});
