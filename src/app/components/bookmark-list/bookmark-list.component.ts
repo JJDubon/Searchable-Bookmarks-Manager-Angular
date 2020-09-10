@@ -16,11 +16,11 @@ import { ComponentBase } from '../component-base';
     trigger('slide', [
       transition('* => void', [
         style({ height: '*' }),
-        animate(150, style({ height: 0 }))
+        animate(75, style({ height: 0 }))
       ]),
       transition('void => *', [
         style({ height: '0' }),
-        animate(150, style({ height: '*' }))
+        animate(75, style({ height: '*' }))
       ])
     ])
   ]
