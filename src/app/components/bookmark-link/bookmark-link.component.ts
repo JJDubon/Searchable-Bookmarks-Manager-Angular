@@ -4,7 +4,6 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
-import { DragService } from 'src/app/services/drag/drag.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { BookmarkLinkDeleteDialogComponent } from './bookmark-link-delete-dialog/bookmark-link-delete-dialog.component';

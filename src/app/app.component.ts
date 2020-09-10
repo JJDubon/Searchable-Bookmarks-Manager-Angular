@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import ResizeObserver from 'resize-observer-polyfill';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentBase } from './components/component-base';
 import { BookmarksService } from './services/bookmarks/bookmarks.service';
-import ResizeObserver from 'resize-observer-polyfill';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-root',

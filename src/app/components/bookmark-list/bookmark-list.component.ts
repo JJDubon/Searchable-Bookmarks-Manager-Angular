@@ -1,11 +1,11 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkTypes } from 'src/app/models/bookmark-types.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { DragService, HoverTargetEvent } from 'src/app/services/drag/drag.service';
 import { ComponentBase } from '../component-base';
-import { takeUntil } from 'rxjs/operators';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-bookmark-list',

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkTypes } from 'src/app/models/bookmark-types.model';
@@ -8,7 +8,8 @@ import { ComponentBase } from '../component-base';
 @Component({
   selector: 'app-bookmark-drop-preview',
   templateUrl: './bookmark-drop-preview.component.html',
-  styleUrls: ['./bookmark-drop-preview.component.css']
+  styleUrls: ['./bookmark-drop-preview.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookmarkDropPreviewComponent extends ComponentBase implements OnInit {
 
