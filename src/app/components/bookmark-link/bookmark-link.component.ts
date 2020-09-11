@@ -101,7 +101,7 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
     });
   }
 
-  private openEditDialog() {
+  private openEditDialog(): void {
     const dialogRef = this.dialog.open(BookmarkLinkEditDialogComponent, {
       width: '320px',
       autoFocus: true,

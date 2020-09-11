@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AsyncSubject, BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, combineLatest, Subject, Subscription } from 'rxjs';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
+import { StorageService } from '../storage/storage.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,21 +21,44 @@ export class BookmarksService {
   private searchResultIds: string[];
   private searchQuerySubscription: Subscription;
 
-  constructor(private chromeExtensionBridge: ChromeExtensionBridgeService) { 
+  constructor(private chromeExtensionBridge: ChromeExtensionBridgeService, private storageService: StorageService) { 
 
     // When the tree has been read, listen to the bookmark api's change events
     this.initialized$.subscribe(() => {
       this.createListeners();
     });
 
-    // Retrieve the bookmarks tree from the chrome extension api
-    this.chromeExtensionBridge.readBookmarksTree().subscribe(({ bookmarks, topLevelIds }) => {
+    // Retrieve the bookmarks tree and locally stored data from the chrome extension api
+    combineLatest(this.chromeExtensionBridge.readBookmarksTree(), this.storageService.getStoredData()).subscribe(results => {
+
+      const bookmarks = results[0].bookmarks;
+      const topLevelIds = results[0].topLevelIds;
+      const storedData = results[1] ?? {};
+
+      if (!environment.production) {
+        console.info("Stored data read in by this extension", storedData);
+      }
 
       // Populate the service's member
       this.managerNodeIds = topLevelIds;
       this.bookmarksMap = {};
       bookmarks.forEach(b => {
+
+        // Store the bookmark in the map
         this.bookmarksMap[b.id] = b;
+
+        // Set the default open/close state
+        const isOpenByDefault = storedData[this.storageService.getOpenByDefaultKey(b.id)];
+        if (isOpenByDefault) {
+          (this.bookmarksMap[b.id] as BookmarkFolderModel).isOpen = true;
+        }
+
+        // If this is the first time running this extension or a new manager node has been added, mark manager nodes as open by default
+        if (this.managerNodeIds.find(x => x === b.id) && isOpenByDefault == null) {
+          (this.bookmarksMap[b.id] as BookmarkFolderModel).isOpen = true;
+          this.storageService.storeOpenByDefault(b.id);
+        }
+
       });
 
       // Add in a dummy node for accessing the bookmarks manager
@@ -51,7 +76,7 @@ export class BookmarksService {
 
       // Update top level ids
       this.topLevelIds$.next(this.managerNodeIds);
-      
+
     });
 
   }

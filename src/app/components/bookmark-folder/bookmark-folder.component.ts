@@ -5,6 +5,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
 import { BookmarkFolderAddFolderDialogComponent } from './bookmark-folder-add-folder-dialog/bookmark-folder-add-folder-dialog.component';
@@ -52,7 +53,8 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     private zone: NgZone,
     private dialog: MatDialog, 
     private contextMenuService: ContextMenuService,
-    private bookmarksService: BookmarksService) { 
+    private bookmarksService: BookmarksService,
+    private storageService: StorageService) { 
     super();
   }
 
@@ -82,6 +84,11 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
       this.contextMenuOptions.push({ id: 'editFolder', text: 'Edit Folder' });
       this.contextMenuOptions.push({ id: 'deleteFolder', text: 'Delete Folder' });
     }
+
+    // Give the user the ability to mark any folder as open by default
+    this.storageService.getOpenByDefault(this.bookmarkId).pipe(takeUntil(this.onDestroy$)).subscribe((isOpenByDefault) => {
+      this.contextMenuOptions.push({ id: 'toggleDefaultOpenState', text: isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default' });
+    });
 
   }
 
@@ -118,6 +125,9 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
           break;
         case 'editFolder':
           this.openEditDialog();
+          break;
+        case 'toggleDefaultOpenState':
+          this.toggleDefaultOpenState();
           break;
       }
 
@@ -165,7 +175,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     });
   }
 
-  private openEditDialog() {
+  private openEditDialog(): void {
     const dialogRef = this.dialog.open(BookmarkFolderEditDialogComponent, {
       width: '320px',
       autoFocus: true,
@@ -178,6 +188,18 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
       } else if (result.action === 'save') {
         this.bookmarksService.updateBookmark(this.bookmark.id, { title: result.title });
       }
+    });
+  }
+
+  private toggleDefaultOpenState(): void {
+    this.storageService.getOpenByDefault(this.bookmarkId).pipe(takeUntil(this.onDestroy$)).subscribe(isOpenByDefault => {
+      if (isOpenByDefault) {
+        this.storageService.storeClosedByDefault(this.bookmarkId);
+      } else {
+        this.storageService.storeOpenByDefault(this.bookmarkId);
+      }
+
+      this.contextMenuOptions.find(x => x.id === 'toggleDefaultOpenState').text = !isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default';
     });
   }
 

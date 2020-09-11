@@ -49,7 +49,6 @@ export class ChromeExtensionBridgeService {
               const model = nodeToModel(node);
               if (model.id === managerNode.id) {
                 model.modifiable = false;
-                (model as BookmarkFolderModel).isOpen = true;
               }
 
               bookmarks.push(model);
@@ -128,6 +127,29 @@ export class ChromeExtensionBridgeService {
 
   public openInNewIWindow(url: string): void {
     chrome.windows.create({url: String(url), incognito: true});
+  }
+
+  public storeLocal<T>(key: string, value: T): Observable<void> {
+    return new Observable<void>(observer => {
+      chrome.storage.local.set({ [key]: value }, () => {
+        observer.next();
+        observer.complete();
+      });
+    });
+  }
+
+  public getLocal(key: string): Observable<any> {
+    return new Observable<any>(observer => {
+      chrome.storage.local.get(key ? [key] : null, (storage) => {
+        if (key == null) {
+          observer.next(storage);
+        } else {
+          observer.next(storage[key]);
+        }
+        
+        observer.complete();
+      });
+    });
   }
 
   private handleBookmarkCreated(newNode: chrome.bookmarks.BookmarkTreeNode): void {
