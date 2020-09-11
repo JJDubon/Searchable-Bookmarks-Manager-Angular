@@ -1,8 +1,8 @@
-import { Injectable, Inject, OnDestroy, AfterViewInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { StorageService } from '../storage/storage.service';
+import { Inject, Injectable } from '@angular/core';
 import ResizeObserver from 'resize-observer-polyfill';
 import { ApplicationSettings } from 'src/app/models/application-settings';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root'

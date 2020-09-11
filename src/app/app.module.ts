@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
@@ -22,6 +23,7 @@ import { BookmarkLinkEditDialogComponent } from './components/bookmark-link/book
 import { BookmarkLinkComponent } from './components/bookmark-link/bookmark-link.component';
 import { BookmarkListComponent } from './components/bookmark-list/bookmark-list.component';
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
+import { ApplicationSettingsDialogComponent } from './components/search-field/application-settings-dialog/application-settings-dialog.component';
 import { SearchFieldComponent } from './components/search-field/search-field.component';
 import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
 
@@ -41,20 +43,22 @@ import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
     BookmarkLinkEditDialogComponent,
     BookmarkListComponent,
     ContextMenuComponent,
-    SearchFieldComponent
+    SearchFieldComponent,
+    ApplicationSettingsDialogComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    MatMenuModule,
-    MatRippleModule,
+    MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
-    MatButtonModule,
-    MatIconModule
+    MatMenuModule,
+    MatRippleModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -27,7 +27,7 @@ export class ContextMenuComponent extends ComponentBase implements OnInit {
     super();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
 
     // This context menu is opened through an observable attached to a service
     this.contextMenuService.contextMenu$.pipe(takeUntil(this.onDestroy$)).subscribe(options => {

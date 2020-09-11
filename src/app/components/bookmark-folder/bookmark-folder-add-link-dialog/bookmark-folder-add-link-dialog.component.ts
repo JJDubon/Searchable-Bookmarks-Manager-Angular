@@ -24,7 +24,7 @@ export class BookmarkFolderAddLinkDialogComponent implements OnInit {
       });
     }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
   public submit(): void {

@@ -56,7 +56,7 @@ export class BookmarksService {
         // If this is the first time running this extension or a new manager node has been added, mark manager nodes as open by default
         if (this.managerNodeIds.find(x => x === b.id) && isOpenByDefault == null) {
           (this.bookmarksMap[b.id] as BookmarkFolderModel).isOpen = true;
-          this.storageService.storeOpenByDefault(b.id);
+          this.storageService.storeOpenByDefault(b.id).subscribe();
         }
 
       });

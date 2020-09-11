@@ -12,7 +12,7 @@ export class BookmarkFolderAddFolderDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<BookmarkFolderAddFolderDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { title: string }) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
   public submit(result: { title: string }): void {

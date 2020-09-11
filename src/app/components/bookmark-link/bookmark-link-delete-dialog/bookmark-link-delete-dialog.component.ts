@@ -11,7 +11,7 @@ export class BookmarkLinkDeleteDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<BookmarkLinkDeleteDialogComponent>) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
   public submit(result: { title: string, action: string }): void {

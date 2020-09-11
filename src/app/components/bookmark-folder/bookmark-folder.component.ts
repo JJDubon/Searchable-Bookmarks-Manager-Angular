@@ -194,9 +194,9 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   private toggleDefaultOpenState(): void {
     this.storageService.getOpenByDefault(this.bookmarkId).pipe(takeUntil(this.onDestroy$)).subscribe(isOpenByDefault => {
       if (isOpenByDefault) {
-        this.storageService.storeClosedByDefault(this.bookmarkId);
+        this.storageService.storeClosedByDefault(this.bookmarkId).subscribe();
       } else {
-        this.storageService.storeOpenByDefault(this.bookmarkId);
+        this.storageService.storeOpenByDefault(this.bookmarkId).subscribe();
       }
 
       this.contextMenuOptions.find(x => x.id === 'toggleDefaultOpenState').text = !isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default';

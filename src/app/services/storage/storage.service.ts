@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApplicationSettings, defaultAppSettings } from 'src/app/models/application-settings';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
@@ -24,12 +24,12 @@ export class StorageService {
     return 'd_o_' + id;
   }
 
-  public storeOpenByDefault(id: string): void {
-    this.chromeExtensionBridge.storeLocal(this.getOpenByDefaultKey(id), true).subscribe();
+  public storeOpenByDefault(id: string): Observable<any> {
+    return this.chromeExtensionBridge.storeLocal(this.getOpenByDefaultKey(id), true);
   }
 
-  public storeClosedByDefault(id: string): void {
-    this.chromeExtensionBridge.storeLocal(this.getOpenByDefaultKey(id), false).subscribe();
+  public storeClosedByDefault(id: string): Observable<any> {
+    return this.chromeExtensionBridge.storeLocal(this.getOpenByDefaultKey(id), false);
   }
 
   public getApplicationSettings(): Observable<ApplicationSettings> {
@@ -41,9 +41,11 @@ export class StorageService {
     }));
   }
 
-  public setApplicationSettings(applicationSettings: ApplicationSettings): void {
-    this.chromeExtensionBridge.storeLocal('fontSize', applicationSettings.fontSize).subscribe();
-    this.chromeExtensionBridge.storeLocal('pageWidth', applicationSettings.pageWidth).subscribe();
+  public setApplicationSettings(applicationSettings: ApplicationSettings): Observable<any> {
+    return combineLatest(
+      this.chromeExtensionBridge.storeLocal('fontSize', applicationSettings.fontSize),
+      this.chromeExtensionBridge.storeLocal('pageWidth', applicationSettings.pageWidth)
+    );
   }
 
 }

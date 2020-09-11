@@ -24,7 +24,7 @@ export class BookmarkLinkEditDialogComponent implements OnInit {
       });
     }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
   public submit(action: 'save' | 'delete'): void {

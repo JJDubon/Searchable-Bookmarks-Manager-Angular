@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Change Settings</h2>
+<div mat-dialog-content>
+  <form [formGroup]='formGroup'>
+    <mat-form-field class="mat-form-full" appearance="fill">
+      <mat-label>Font/Item Size</mat-label>
+      <mat-select formControlName="fontSize" placeholder="Select a font size">
+        <mat-option [value]="'regular'">Normal</mat-option>
+        <mat-option [value]="'large'">Large</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="mat-form-full" appearance="fill">
+      <mat-label>Extension Width</mat-label>
+      <mat-select formControlName="pageWidth" placeholder="Select a page width">
+        <mat-option [value]="'regular'">Normal</mat-option>
+        <mat-option [value]="'large'">Large</mat-option>
+        <mat-option [value]="'extra large'">Extra Large</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submit()" [disabled]="!formGroup.valid" cdkFocusInitial>Update</button>
+</div>
