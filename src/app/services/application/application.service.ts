@@ -29,7 +29,7 @@ export class ApplicationService {
   public applySettings(): void {
     this.storageService.getApplicationSettings().subscribe(settings => {
       document.querySelector('main').style.width = getExtensionWidth(settings);
-      document.querySelector('main').style.fontSize = getRootFontSize(settings);
+      document.querySelector('html').style.fontSize = getRootFontSize(settings);
     });
   }
 
