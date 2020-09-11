@@ -1,10 +1,8 @@
-import { DOCUMENT } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import ResizeObserver from 'resize-observer-polyfill';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentBase } from './components/component-base';
+import { ApplicationService } from './services/application/application.service';
 import { BookmarksService } from './services/bookmarks/bookmarks.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -18,13 +16,10 @@ export class AppComponent extends ComponentBase implements OnInit, AfterViewInit
   public loadingError = false;
   public topLevelIds: string[] = [];
 
-  private hasOverscroll = false;
-  private overscrollObserver = new ResizeObserver(() => this.calcOverscroll());
-
   constructor(
-    @Inject(DOCUMENT) private document: any,
-    private cd: ChangeDetectorRef, 
-    private bookmarksService: BookmarksService) {
+    private cd: ChangeDetectorRef,
+    private bookmarksService: BookmarksService,
+    private applicationService: ApplicationService) {
     super();
   }
 
@@ -48,26 +43,11 @@ export class AppComponent extends ComponentBase implements OnInit, AfterViewInit
   }
 
   public ngAfterViewInit(): void {
-    this.calcOverscroll();
-    this.overscrollObserver.observe(this.document.querySelector("html"));
+    this.applicationService.init();
   }
 
   public ngOnDestroy(): void {
-    this.overscrollObserver.disconnect();
-  }
-
-  private calcOverscroll(): void {
-    const windowHeight = window.innerHeight;
-    const contentHeight = Math.floor(this.document.querySelector("html").getBoundingClientRect().height);
-    const hasOverscroll = windowHeight < contentHeight && windowHeight != contentHeight;
-    if (this.hasOverscroll != hasOverscroll) {
-      this.hasOverscroll = hasOverscroll;
-      if (this.hasOverscroll) {
-        this.document.querySelector("html").classList.add("has-overscroll");
-      } else {
-        this.document.querySelector("html").classList.remove("has-overscroll");
-      }
-    }
+    this.applicationService.destroy();
   }
   
 }

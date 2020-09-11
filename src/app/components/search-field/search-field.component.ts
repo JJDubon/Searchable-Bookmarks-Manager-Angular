@@ -38,4 +38,8 @@ export class SearchFieldComponent implements OnInit {
     this.cd.markForCheck();
   }
 
+  public showSettings(): void {
+    // TODO
+  }
+
 }

@@ -1,8 +1,13 @@
 <mat-form-field class="mat-form-full" appearance="fill">
   <mat-label>Search</mat-label>
   <input matInput type="text" [ngModel]="searchText" (ngModelChange)="onSearchTextChange($event)">
-  <button mat-icon-button matSuffix (click)="closeSearch()">
-    <mat-icon *ngIf="searchText == null || searchText.length === 0">search</mat-icon>
-    <mat-icon *ngIf="searchText && searchText.length !== 0">close</mat-icon>
-  </button>
+  <div matSuffix>
+    <button class="search-icon icon-float-left" mat-icon-button (click)="closeSearch()">
+      <mat-icon *ngIf="searchText == null || searchText.length === 0">search</mat-icon>
+      <mat-icon *ngIf="searchText && searchText.length !== 0">search_off</mat-icon>
+    </button>
+    <button class="search-icon" mat-icon-button matSuffix (click)="showSettings()">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </div>
 </mat-form-field>
