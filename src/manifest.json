@@ -1,12 +1,33 @@
 {
+
   "name": "Searchable Bookmarks Manager",
   "description": "Search through your bookmarks easily with a popup manager, straight from your address bar!",
   "short_name": "SBM",
   "version": "3.0",
   "manifest_version": 2,
+
   "browser_action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_title": "Bookmarks",
+    "default_icon" : {
+      "16":  "assets/images/icon16.png",
+      "19": "assets/images/icon19.png",
+      "38": "assets/images/icon38.png",
+      "48":  "assets/images/icon48.png",
+      "128": "assets/images/icon128.png"
+    }
   },
+
+  "icons": {
+    "16":  "assets/images/icon16.png",
+    "48":  "assets/images/icon48.png",
+    "128": "assets/images/icon128.png"
+  },
+
+  "background": {
+    "page": "background.html"
+  },
+
   "permissions": [
     "activeTab",
     "bookmarks",
@@ -14,4 +35,5 @@
     "contextMenus",
     "chrome://favicon/"
   ]
+
 }
