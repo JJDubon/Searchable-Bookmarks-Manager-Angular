@@ -1,10 +1,11 @@
 {
+  
+  "manifest_version": 2,
 
   "name": "Searchable Bookmarks Manager",
   "description": "Search through your bookmarks easily with a popup manager, straight from your address bar!",
   "short_name": "SBM",
   "version": "3.0",
-  "manifest_version": 2,
 
   "browser_action": {
     "default_popup": "index.html",
