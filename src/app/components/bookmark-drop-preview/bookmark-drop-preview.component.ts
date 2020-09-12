@@ -21,10 +21,13 @@ export class BookmarkDropPreviewComponent extends ComponentBase implements OnIni
   }
 
   public ngOnInit(): void {
+
+    // Render the drop ghost from the item the service is actively dragging
     this.dragService.dragTarget$.pipe(takeUntil(this.onDestroy$)).subscribe(target => {
       this.dragTarget = target;
       this.cd.detectChanges();
     });
+
   }
 
 }

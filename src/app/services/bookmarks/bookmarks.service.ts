@@ -3,9 +3,9 @@ import { AsyncSubject, BehaviorSubject, combineLatest, Subject, Subscription } f
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
+import { environment } from 'src/environments/environment';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
 import { StorageService } from '../storage/storage.service';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +29,7 @@ export class BookmarksService {
     });
 
     // Retrieve the bookmarks tree and locally stored data from the chrome extension api
-    combineLatest(this.chromeExtensionBridge.readBookmarksTree(), this.storageService.getStoredData()).subscribe(results => {
+    combineLatest([this.chromeExtensionBridge.readBookmarksTree(), this.storageService.getStoredData()]).subscribe(results => {
 
       const bookmarks = results[0].bookmarks;
       const topLevelIds = results[0].topLevelIds;

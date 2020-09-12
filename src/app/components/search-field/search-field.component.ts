@@ -52,6 +52,7 @@ export class SearchFieldComponent extends ComponentBase implements OnInit {
 
   public onSearchTextChange(updatedText: string): void {
 
+    // Update the search text and either queue a new search or end the existing search (if the search text is empty)
     this.searchText = updatedText;
     if (this.searchText && this.searchText.length !== 0) {
       this.bookmarkService.search(this.searchText);

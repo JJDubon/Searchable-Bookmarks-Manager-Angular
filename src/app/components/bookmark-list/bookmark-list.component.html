@@ -1,11 +1,13 @@
 <ol>
   <li *ngFor="let bookmark of bookmarks; let i = index; trackBy: trackById">
 
+    <!-- Note: Function binding (in *ngIf) is fine because we are using the OnPush change detection strategy -->
     <ng-container *ngIf="showDragTopPreview(i)" [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
 
     <app-bookmark-folder *ngIf="bookmark.type === BookmarkTypes.Folder" [bookmarkId]="bookmark.id"></app-bookmark-folder>
     <app-bookmark-link *ngIf="bookmark.type === BookmarkTypes.Link" [bookmarkId]="bookmark.id"></app-bookmark-link>
 
+    <!-- Note: Function binding (in *ngIf) is fine because we are using the OnPush change detection strategy -->
     <ng-container *ngIf="showDragBottomPreview(i)" [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
 
   </li>

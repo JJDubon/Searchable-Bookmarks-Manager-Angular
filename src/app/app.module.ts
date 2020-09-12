@@ -31,6 +31,7 @@ import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
   declarations: [
     AllowUnsafePipe,
     AppComponent,
+    ApplicationSettingsDialogComponent,
     BookmarkBaseComponent,
     BookmarkDropPreviewComponent,
     BookmarkFolderAddFolderDialogComponent,
@@ -43,8 +44,7 @@ import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
     BookmarkLinkEditDialogComponent,
     BookmarkListComponent,
     ContextMenuComponent,
-    SearchFieldComponent,
-    ApplicationSettingsDialogComponent
+    SearchFieldComponent
   ],
   imports: [
     BrowserModule,

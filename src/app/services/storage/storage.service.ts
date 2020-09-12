@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApplicationSettings, defaultAppSettings } from 'src/app/models/application-settings';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
@@ -42,10 +42,10 @@ export class StorageService {
   }
 
   public setApplicationSettings(applicationSettings: ApplicationSettings): Observable<any> {
-    return combineLatest(
+    return combineLatest([
       this.chromeExtensionBridge.storeLocal('fontSize', applicationSettings.fontSize),
       this.chromeExtensionBridge.storeLocal('pageWidth', applicationSettings.pageWidth)
-    );
+    ]);
   }
 
 }
