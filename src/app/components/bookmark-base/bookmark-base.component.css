@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+.selected {
+  background-color: lightgray;
+}
+
 .bookmark > .bookmark-icon {
   display: inline-block;
   position: relative;

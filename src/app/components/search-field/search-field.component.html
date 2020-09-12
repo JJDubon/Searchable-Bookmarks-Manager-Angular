@@ -1,6 +1,6 @@
 <mat-form-field class="mat-form-full" appearance="fill">
   <mat-label>Search</mat-label>
-  <input matInput type="text" [ngModel]="searchText" (ngModelChange)="onSearchTextChange($event)">
+  <input #searchInputField matInput type="text" [ngModel]="searchText" (ngModelChange)="onSearchTextChange($event)">
   <div matSuffix>
     <button class="search-icon icon-float-left" mat-icon-button (click)="closeSearch()">
       <mat-icon *ngIf="searchText == null || searchText.length === 0">search</mat-icon>

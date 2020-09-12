@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { ApplicationSettings } from 'src/app/models/application-settings';
 import { ApplicationService } from 'src/app/services/application/application.service';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { DragService } from 'src/app/services/drag/drag.service';
+import { KeyboardService } from 'src/app/services/keyboard/keyboard.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ComponentBase } from '../component-base';
 import { ApplicationSettingsDialogComponent } from './application-settings-dialog/application-settings-dialog.component';
@@ -17,6 +18,7 @@ import { ApplicationSettingsDialogComponent } from './application-settings-dialo
 })
 export class SearchFieldComponent extends ComponentBase implements OnInit {
 
+  @ViewChild("searchInputField") public searchInputField: ElementRef;
   public searchText: string;
 
   constructor(
@@ -25,11 +27,27 @@ export class SearchFieldComponent extends ComponentBase implements OnInit {
     private applicationService: ApplicationService,
     private storageService: StorageService,
     private bookmarkService: BookmarksService, 
-    private dragService: DragService) { 
+    private dragService: DragService,
+    private keyboardService: KeyboardService) { 
     super();
   }
 
   public ngOnInit(): void {
+
+    // Either clear a search or close the extension in response to the close event
+    this.keyboardService.closeEvent$.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
+      if (this.searchText == null || this.searchText.length === 0) {
+        window.close();
+      } else {
+        this.closeSearch();
+      }
+    });
+
+    // Focus the search input when a keyboard event takes place
+    this.keyboardService.keyboardInput$.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
+      this.searchInputField?.nativeElement?.focus();
+    });
+
   }
 
   public onSearchTextChange(updatedText: string): void {

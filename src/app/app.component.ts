@@ -3,6 +3,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ComponentBase } from './components/component-base';
 import { ApplicationService } from './services/application/application.service';
 import { BookmarksService } from './services/bookmarks/bookmarks.service';
+import { KeyboardService } from './services/keyboard/keyboard.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent extends ComponentBase implements OnInit, AfterViewInit
   constructor(
     private cd: ChangeDetectorRef,
     private bookmarksService: BookmarksService,
+    private keyboardService: KeyboardService,
     private applicationService: ApplicationService) {
     super();
   }
@@ -44,10 +46,12 @@ export class AppComponent extends ComponentBase implements OnInit, AfterViewInit
 
   public ngAfterViewInit(): void {
     this.applicationService.init();
+    this.keyboardService.init();
   }
 
   public ngOnDestroy(): void {
     this.applicationService.destroy();
+    this.keyboardService.destroy();
   }
   
 }
