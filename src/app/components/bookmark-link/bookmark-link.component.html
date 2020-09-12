@@ -1,4 +1,4 @@
 <div class="bookmark-link">
   <app-bookmark-base *ngIf="bookmark" [id]="bookmark.id" [title]="bookmark.title" [icon]="bookmark.icon" [tooltip]="bookmark.url" [draggable]="bookmark.modifiable"
-                     (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
+                     (click)="openBookmark($event)" (mouseup)="openIfMiddleClick($event)" (contextmenu)="triggerContextMenu($event)"></app-bookmark-base>
 </div>

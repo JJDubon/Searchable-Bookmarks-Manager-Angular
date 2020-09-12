@@ -61,6 +61,20 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
     });
   }
 
+  public openBookmark(event: MouseEvent): void {
+    if ( (event.which === 1 || event.button === 1) && event.ctrlKey) {
+      this.bookmarksService.openInNewTab(this.bookmark);
+    } else {
+      this.bookmarksService.openInCurrentTab(this.bookmark);
+    }
+  }
+
+  public openIfMiddleClick(event: MouseEvent): void {
+    if (event.which === 2) {
+      this.bookmarksService.openInNewTab(this.bookmark);
+    }
+  }
+
   private contextItemSelected(id: string): void {
     this.zone.run(() => {
 
