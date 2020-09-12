@@ -12,7 +12,7 @@
       }
     </style>
   </defs>
-  <path id="Rounded_Rectangle_1" data-name="Rounded Rectangle 1" class="cls-1" d="M7,25.318H109.813a7,7,0,0,1,7,7V103.2a7,7,0,0,1-7,7H7a7,7,0,0,1-7-7V32.318A7,7,0,0,1,7,25.318Z"/>
-  <path id="Rounded_Rectangle_2" data-name="Rounded Rectangle 2" class="cls-1" d="M7,14H62.344a7,7,0,0,1,7,7V51.328a7,7,0,0,1-7,7H7a7,7,0,0,1-7-7V21A7,7,0,0,1,7,14Z"/>
-  <path class="cls-2" d="M15.616,63.043H128.2L116.668,110.2H4.084Z"/>
+  <path id="Rounded_Rectangle_1" data-name="Rounded Rectangle 1" class="cls-1" d="M7,17.318H109.813a7,7,0,0,1,7,7V95.2a7,7,0,0,1-7,7H7a7,7,0,0,1-7-7V24.318A7,7,0,0,1,7,17.318Z"/>
+  <path id="Rounded_Rectangle_2" data-name="Rounded Rectangle 2" class="cls-1" d="M7,6H62.344a7,7,0,0,1,7,7V43.327a7,7,0,0,1-7,7H7a7,7,0,0,1-7-7V13A7,7,0,0,1,7,6Z"/>
+  <path class="cls-2" d="M15.616,55.043H128.2L116.667,102.2H4.084Z"/>
 </svg>
