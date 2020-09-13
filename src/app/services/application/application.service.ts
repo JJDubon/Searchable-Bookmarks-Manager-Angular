@@ -9,7 +9,7 @@ import { StorageService } from '../storage/storage.service';
 })
 export class ApplicationService {
 
-  private hasOverscroll = false;
+  private hasOverscroll: boolean = null;
   private overscrollObserver = new ResizeObserver(() => this.calcOverscroll());
 
   constructor(
@@ -34,9 +34,7 @@ export class ApplicationService {
   }
 
   private calcOverscroll(): void {
-    const windowHeight = window.innerHeight;
-    const contentHeight = Math.floor(this.document.querySelector("html").getBoundingClientRect().height);
-    const hasOverscroll = windowHeight < contentHeight && windowHeight != contentHeight;
+    const hasOverscroll = window.innerWidth > document.documentElement.clientWidth;
     if (this.hasOverscroll != hasOverscroll) {
       this.hasOverscroll = hasOverscroll;
       if (this.hasOverscroll) {
