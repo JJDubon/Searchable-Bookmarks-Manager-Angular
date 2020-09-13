@@ -23,7 +23,7 @@ export class ContextMenuComponent extends ComponentBase implements OnInit {
   public activePosition: { x: number, y: number } = { x: 0, y: 0 };
   public contextMenuPosition: { x: number, y: number } = { x: 0, y: 0 };
 
-  constructor(private cd: ChangeDetectorRef, @Inject(DOCUMENT) private document: any, private contextMenuService: ContextMenuService) {
+  constructor(private cd: ChangeDetectorRef, @Inject(DOCUMENT) private document: Document, private contextMenuService: ContextMenuService) {
     super();
   }
 

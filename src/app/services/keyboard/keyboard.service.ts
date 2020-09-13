@@ -5,6 +5,7 @@ import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarkTypes } from 'src/app/models/bookmark-types.model';
+import { WindowToken } from 'src/window';
 import { BookmarksService } from '../bookmarks/bookmarks.service';
 
 type BookmarkListNode = { prev: BookmarkListNode, next: BookmarkListNode, model: BookmarkBaseModel };
@@ -23,7 +24,10 @@ export class KeyboardService {
   private activeId: string;
   private listMap: { [id: string]: BookmarkListNode };
 
-  constructor(@Inject(DOCUMENT) private document: any, private bookmarksService: BookmarksService) { }
+  constructor(
+    @Inject(WindowToken) private window: Window,
+    @Inject(DOCUMENT) private document: Document, 
+    private bookmarksService: BookmarksService) { }
 
   public init(): void {
 
@@ -129,7 +133,7 @@ export class KeyboardService {
     // Scroll the bookmark base into view
     const element = document.querySelector(`[data-bookmarkId="${id}"]`);
     if (element) {
-      scrollIntoView(element as HTMLElement);
+      this.scrollIntoView(element as HTMLElement);
     }
 
   }
@@ -214,21 +218,21 @@ export class KeyboardService {
 
   }
 
-}
+  private scrollIntoView(element: HTMLElement): void {
 
-function scrollIntoView(element: HTMLElement): void {
-
-	let targetTop = element.getBoundingClientRect().top;
-	let targetBottom = element.getBoundingClientRect().bottom;
-
-  // Scroll down to the target.
-	if ((targetTop >= 0) && (targetBottom >= window.innerHeight)) {
-		element.scrollIntoView(false);
-  } 
+    let targetTop = element.getBoundingClientRect().top;
+    let targetBottom = element.getBoundingClientRect().bottom;
   
-  // Scroll up to the target.
-  else if (targetTop < 0) {
-		element.scrollIntoView(true);
+    // Scroll down to the target.
+    if ((targetTop >= 0) && (targetBottom >= this.window.innerHeight)) {
+      element.scrollIntoView(false);
+    } 
+    
+    // Scroll up to the target.
+    else if (targetTop < 0) {
+      element.scrollIntoView(true);
+    }
+  
   }
 
 }

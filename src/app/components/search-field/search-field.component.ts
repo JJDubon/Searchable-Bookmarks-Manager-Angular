@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { ApplicationSettings } from 'src/app/models/application-settings';
@@ -7,6 +7,7 @@ import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { DragService } from 'src/app/services/drag/drag.service';
 import { KeyboardService } from 'src/app/services/keyboard/keyboard.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { WindowToken } from 'src/window';
 import { ComponentBase } from '../component-base';
 import { ApplicationSettingsDialogComponent } from './application-settings-dialog/application-settings-dialog.component';
 
@@ -22,6 +23,7 @@ export class SearchFieldComponent extends ComponentBase implements OnInit {
   public searchText: string;
 
   constructor(
+    @Inject(WindowToken) private window: Window,
     private cd: ChangeDetectorRef, 
     private dialog: MatDialog, 
     private applicationService: ApplicationService,
@@ -37,7 +39,7 @@ export class SearchFieldComponent extends ComponentBase implements OnInit {
     // Either clear a search or close the extension in response to the close event
     this.keyboardService.closeEvent$.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
       if (this.searchText == null || this.searchText.length === 0) {
-        window.close();
+        this.window.close();
       } else {
         this.closeSearch();
       }

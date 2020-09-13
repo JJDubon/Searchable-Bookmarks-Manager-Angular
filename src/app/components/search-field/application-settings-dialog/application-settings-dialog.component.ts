@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApplicationSettings } from 'src/app/models/application-settings';
+import { WindowToken } from 'src/window';
 import { ComponentBase } from '../../component-base';
 
 @Component({
@@ -16,6 +17,7 @@ export class ApplicationSettingsDialogComponent extends ComponentBase implements
   public formGroup: FormGroup;
 
   constructor(
+    @Inject(WindowToken) private window: Window,
     private cd: ChangeDetectorRef,
     private dialogRef: MatDialogRef<ApplicationSettingsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ApplicationSettings) { 
@@ -32,7 +34,7 @@ export class ApplicationSettingsDialogComponent extends ComponentBase implements
   public ngOnInit(): void {
 
     // Change detection fix for the mat-select component
-    fromEvent(window, 'click').pipe(takeUntil(this.onDestroy$)).subscribe(() => {
+    fromEvent(this.window, 'click').pipe(takeUntil(this.onDestroy$)).subscribe(() => {
       this.cd.detectChanges();
     });
 

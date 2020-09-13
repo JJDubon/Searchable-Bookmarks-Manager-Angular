@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import ResizeObserver from 'resize-observer-polyfill';
 import { ApplicationSettings } from 'src/app/models/application-settings';
+import { WindowToken } from 'src/window';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -13,7 +14,8 @@ export class ApplicationService {
   private overscrollObserver = new ResizeObserver(() => this.calcOverscroll());
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
+    @Inject(WindowToken) private window: Window,
+    @Inject(DOCUMENT) private document: Document,
     private storageService: StorageService) { }
 
   public init(): void {
@@ -28,13 +30,13 @@ export class ApplicationService {
 
   public applySettings(): void {
     this.storageService.getApplicationSettings().subscribe(settings => {
-      document.querySelector('main').style.width = getExtensionWidth(settings);
-      document.querySelector('html').style.fontSize = getRootFontSize(settings);
+      this.document.querySelector('main').style.width = getExtensionWidth(settings);
+      this.document.querySelector('html').style.fontSize = getRootFontSize(settings);
     });
   }
 
   private calcOverscroll(): void {
-    const hasOverscroll = window.innerWidth > document.documentElement.clientWidth;
+    const hasOverscroll = this.window.innerWidth > this.document.documentElement.clientWidth;
     if (this.hasOverscroll != hasOverscroll) {
       this.hasOverscroll = hasOverscroll;
       if (this.hasOverscroll) {

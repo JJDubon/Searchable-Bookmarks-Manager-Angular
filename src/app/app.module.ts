@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { windowProvider, WindowToken } from 'src/window';
 import { AppComponent } from './app.component';
 import { BookmarkBaseComponent } from './components/bookmark-base/bookmark-base.component';
 import { BookmarkDropPreviewComponent } from './components/bookmark-drop-preview/bookmark-drop-preview.component';
@@ -60,7 +61,9 @@ import { AllowUnsafePipe } from './pipes/allow-unsafe.pipe';
     MatRippleModule,
     MatSelectModule
   ],
-  providers: [],
+  providers: [
+    { provide: WindowToken, useFactory: windowProvider }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

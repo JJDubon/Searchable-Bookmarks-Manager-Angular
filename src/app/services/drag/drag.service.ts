@@ -1,9 +1,10 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, fromEvent, merge, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarkTypes } from 'src/app/models/bookmark-types.model';
+import { WindowToken } from 'src/window';
 import { BookmarksService } from '../bookmarks/bookmarks.service';
 
 export type HoverTargetTypes = 'top' | 'bottom' | 'inside';
@@ -23,7 +24,9 @@ export class DragService {
   private dragTarget: BookmarkBaseModel;
   private hoverTarget: HoverTargetEvent;
 
-  constructor(private bookmarkService: BookmarksService) { 
+  constructor(
+    @Inject(WindowToken) private window: Window,
+    private bookmarkService: BookmarksService) { 
 
     this.dragTarget$.subscribe(target => {
       this.dragTarget = target;
@@ -86,7 +89,7 @@ export class DragService {
       // Set the drag image to be a representation of the dragged element, and hide the original element
       ev.dataTransfer.setDragImage((ev.target as HTMLElement).querySelector('.bookmark-icon'), -8, -4);
       this.dragTarget$.next(this.bookmarkService.getBookmark(id));
-      window.requestAnimationFrame(() => { 
+      this.window.requestAnimationFrame(() => { 
         (ev.target as HTMLElement).classList.add('hidden');
       });
 
@@ -102,7 +105,7 @@ export class DragService {
     // Reset service and hidden dom elements
     this.dragTarget$.next(null);
     this.hoverTarget$.next(null);
-    window.requestAnimationFrame(() => { 
+    this.window.requestAnimationFrame(() => { 
       (ev.target as HTMLElement).classList.remove('hidden');
     });
 
