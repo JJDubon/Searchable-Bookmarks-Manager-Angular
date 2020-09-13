@@ -136,6 +136,7 @@ export class DragService {
       if (parentFolder.id != dragTarget.id && !this.bookmarkService.idRepresentsChildOf(parentFolder.id, dragTarget.id)) {
 
         // Pass the request to chrome's api
+        index = index < 0 ? 0 : index;
         this.bookmarkService.moveBookmark(dragTarget.id, parentFolder.id, index);
 
       }

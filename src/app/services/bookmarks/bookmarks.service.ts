@@ -237,6 +237,11 @@ export class BookmarksService {
     // Update the order of a bookmarks children when moved
     this.chromeExtensionBridge.onBookmarkMoved$.subscribe(({id, parentId, oldParentId, index, oldIndex}) => {
 
+      const target = this.bookmarksMap[id];
+      if (target) {
+        target.parentId = parentId;
+      }
+
       const parent = this.bookmarksMap[parentId] as BookmarkFolderModel;
       if (parent) {
         this.chromeExtensionBridge.getChildrenIds(parentId).subscribe(ids => {
