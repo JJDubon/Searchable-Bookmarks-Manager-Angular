@@ -1,6 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import ResizeObserver from 'resize-observer-polyfill';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { ApplicationSettings } from 'src/app/models/application-settings';
 import { WindowToken } from 'src/window';
 import { StorageService } from '../storage/storage.service';
@@ -19,7 +21,7 @@ export class ApplicationService {
     private storageService: StorageService) { }
 
   public init(): void {
-    this.applySettings();
+    this.applySettings().subscribe();
     this.calcOverscroll();
     this.overscrollObserver.observe(this.document.querySelector("html"));
   }
@@ -28,11 +30,11 @@ export class ApplicationService {
     this.overscrollObserver.disconnect();
   }
 
-  public applySettings(): void {
-    this.storageService.getApplicationSettings().subscribe(settings => {
+  public applySettings(): Observable<ApplicationSettings> {
+    return this.storageService.getApplicationSettings().pipe(tap(settings => {
       this.document.querySelector('main').style.width = getExtensionWidth(settings);
       this.document.querySelector('html').style.fontSize = getRootFontSize(settings);
-    });
+    }));
   }
 
   private calcOverscroll(): void {

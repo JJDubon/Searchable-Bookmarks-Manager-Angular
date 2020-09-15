@@ -87,7 +87,7 @@ export class SearchFieldComponent extends ComponentBase implements OnInit {
       dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: ApplicationSettings) => {
         if (result) {
           this.storageService.setApplicationSettings(result).subscribe(() => {
-            this.applicationService.applySettings();
+            this.applicationService.applySettings().subscribe();
           });
         }
       });

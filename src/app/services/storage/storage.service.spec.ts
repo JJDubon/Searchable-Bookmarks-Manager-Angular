@@ -6,7 +6,7 @@ import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-
 import { chromeExtensionBridgeTestService } from '../chrome-extension-bridge/chrome-extension-bridge.test.service';
 import { StorageService } from './storage.service';
 
-fdescribe('StorageService', () => {
+describe('StorageService', () => {
 
   let service: StorageService;
 
