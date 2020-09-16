@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { ApplicationSettings } from 'src/app/models/application-settings';
-import { ApplicationService } from '../application/application.service';
+import { chromeExtensionBridgeTestService } from '../../tests/helpers/chrome-extension-bridge-test.service';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
-import { chromeExtensionBridgeTestService } from '../chrome-extension-bridge/chrome-extension-bridge.test.service';
 import { StorageService } from './storage.service';
 
 describe('StorageService', () => {

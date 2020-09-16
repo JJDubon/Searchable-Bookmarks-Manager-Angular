@@ -1,4 +1,4 @@
-import { ChromeExtensionBridgeService } from './chrome-extension-bridge.service';
+import { ChromeExtensionBridgeService } from 'src/app/services/chrome-extension-bridge/chrome-extension-bridge.service';
 
 export const chromeExtensionBridgeTestService = {};
 
