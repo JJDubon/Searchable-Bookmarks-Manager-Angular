@@ -1,8 +1,8 @@
 .bookmark {
   width: 100%;
   position: relative;
-  left: -.75em;
-  padding: .75em .5em;
+  left: -1em;
+  padding: .75em;
   cursor: pointer;
   transition: all 100ms ease;
   box-sizing: border-box;

@@ -16,12 +16,10 @@ import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog
 const toggleAnimation =
   trigger('toggle', [
     state('open', style({
-      height: '*',
-      transform: 'scaleY(1)'
+      height: '*'
     })),
     state('closed', style({
-      height: '0px',
-      transform: 'scaleY(0)'
+      height: '0px'
     })),
     transition('open => closed', [
       animate('100ms ease-in-out')

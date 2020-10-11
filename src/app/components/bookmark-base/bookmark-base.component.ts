@@ -75,8 +75,10 @@ export class BookmarkBaseComponent extends ComponentBase implements OnInit, Afte
     this.drag$?.unsubscribe();
   }
 
-  public emitClick(): void {
-    this.selected.next();
+  public emitClick(ev: MouseEvent): void {
+    if (ev.button === 0) {
+      this.selected.next();
+    }
   }
 
 }

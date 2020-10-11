@@ -3,8 +3,10 @@
 }
 
 .folder-list {
-  padding-left: .75em;
+  margin-left: -0.25em;
+  padding-left: 1em;
   border-left: 2px solid #E1E2E1;
   transition: all 100ms ease-in-out;
   transform-origin: top left;
+  overflow-y: hidden;
 }
