@@ -11,19 +11,7 @@ import { ComponentBase } from '../component-base';
   selector: 'app-bookmark-list',
   templateUrl: './bookmark-list.component.html',
   styleUrls: ['./bookmark-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('slide', [
-      transition('* => void', [
-        style({ height: '*' }),
-        animate('75ms ease-out', style({ height: 0 }))
-      ]),
-      transition('void => *', [
-        style({ height: '0' }),
-        animate('75ms ease-in', style({ height: '*' }))
-      ])
-    ])
-  ]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookmarkListComponent extends ComponentBase implements OnInit, OnChanges {
 

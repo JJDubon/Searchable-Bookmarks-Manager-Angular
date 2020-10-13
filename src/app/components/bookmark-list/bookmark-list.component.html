@@ -14,7 +14,7 @@
 </ol>
 
 <ng-template #dropPreview let-bookmark="bookmark">
-  <div [@slide] class="bookmark-drop-preview">
+  <div class="bookmark-drop-preview">
     <app-bookmark-base [id]="bookmark.id" [title]="bookmark.title" [draggable]="false"
                        [icon]="bookmark.type === BookmarkTypes.Folder ? '/assets/images/folder.svg' : bookmark.icon"></app-bookmark-base>
   </div>
