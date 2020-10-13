@@ -1,6 +1,6 @@
 // Models the settings the user can configure for this application
 export class ApplicationSettings {
-  public fontSize: 'regular' | 'large';
+  public fontSize: 'compact' | 'regular' | 'large';
   public pageWidth: 'regular' | 'large' | 'extra large';
 }
 

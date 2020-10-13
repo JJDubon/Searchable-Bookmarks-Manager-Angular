@@ -4,6 +4,7 @@
     <mat-form-field class="mat-form-full" appearance="fill">
       <mat-label>Font/Item Size</mat-label>
       <mat-select formControlName="fontSize" placeholder="Select a font size">
+        <mat-option [value]="'compact'">Compact</mat-option>
         <mat-option [value]="'regular'">Normal</mat-option>
         <mat-option [value]="'large'">Large</mat-option>
       </mat-select>
