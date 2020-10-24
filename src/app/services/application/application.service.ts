@@ -22,7 +22,6 @@ export class ApplicationService {
     private storageService: StorageService) { }
 
   public init(): void {
-    this.applySettings().subscribe();
     this.calcOverscroll();
     this.overscrollObserver.observe(this.document.querySelector("html"));
   }
