@@ -39,6 +39,11 @@ export class KeyboardService {
     // Listen to document keyboard events
     const keyupSubscription = fromEvent<KeyboardEvent>(this.document, 'keydown').subscribe((ev) => {
 
+      // Ignore keyboard events if a cdk dialog is open
+      if (document.getElementsByTagName("mat-dialog-container").length !== 0) {
+        return;
+      }
+
       // Build a linked list of bookmarks so we can determine which bookmark is next/prev in the list
       this.buildBookmarkLinkedList();
 
