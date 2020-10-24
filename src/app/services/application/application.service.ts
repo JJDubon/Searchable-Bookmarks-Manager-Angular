@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { ApplicationRef, Inject, Injectable } from '@angular/core';
 import ResizeObserver from 'resize-observer-polyfill';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -18,6 +18,7 @@ export class ApplicationService {
   constructor(
     @Inject(WindowToken) private window: Window,
     @Inject(DOCUMENT) private document: Document,
+    private appRef: ApplicationRef,
     private storageService: StorageService) { }
 
   public init(): void {
@@ -34,6 +35,7 @@ export class ApplicationService {
     return this.storageService.getApplicationSettings().pipe(tap(settings => {
       this.document.querySelector('main').style.width = getExtensionWidth(settings);
       this.document.querySelector('html').style.fontSize = getRootFontSize(settings);
+      this.appRef.tick();
     }));
   }
 
