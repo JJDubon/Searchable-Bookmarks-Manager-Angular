@@ -1,33 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { chromeExtensionBridgeTestService } from 'src/app/tests/helpers/chrome-extension-bridge-test.service';
-import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
-import { testbookmarks } from 'src/app/tests/data/test-bookmarks';
-import { BookmarksService } from './bookmarks.service';
-import { of, Subject } from 'rxjs';
-import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
+import { of } from 'rxjs';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
+import { testbookmarks } from 'src/app/tests/data/test-bookmarks';
+import { chromeExtensionBridgeTestService } from 'src/app/tests/helpers/chrome-extension-bridge-test.service';
+import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
+import { BookmarksService } from './bookmarks.service';
 
 describe('BookmarksService', () => {
 
   let service: BookmarksService;
-
-  beforeAll(() => {
-
-    spyOn(chromeExtensionBridgeTestService, 'readBookmarksTree').and.returnValue(of({
-      topLevelIds: testbookmarks.filter(x => x.parentId === "0").map(x => x.id),
-      bookmarks: testbookmarks as BookmarkBaseModel[]
-    }));
-
-    spyOn(chromeExtensionBridgeTestService, 'getLocal').and.returnValue(of({}));
-    spyOn(chromeExtensionBridgeTestService, 'storeLocal').and.returnValue(of());
-    chromeExtensionBridgeTestService.onBookmarkCreated$ = new Subject<{model: BookmarkBaseModel}>();
-    chromeExtensionBridgeTestService.onBookmarkRemoved$ = new Subject<{id: string, parentId: string}>();
-    chromeExtensionBridgeTestService.onBookmarkChanged$ = new Subject<{id: string, title: string, url: string}>();
-    chromeExtensionBridgeTestService.onBookmarkMoved$ = new Subject<{id: string, parentId: string, oldParentId: string, index: number, oldIndex: number}>();
-    chromeExtensionBridgeTestService.onBookmarkChildrenReordered$ = new Subject<{id: string, childIds: string[]}>();
-
-  });
 
   beforeEach(() => {
 

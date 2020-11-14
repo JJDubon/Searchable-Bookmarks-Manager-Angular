@@ -1,9 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { of, Subject } from 'rxjs';
-import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
-import { testbookmarks } from 'src/app/tests/data/test-bookmarks';
-import { bookmarksTestService } from 'src/app/tests/helpers/bookmarks-test.service';
 import { chromeExtensionBridgeTestService } from 'src/app/tests/helpers/chrome-extension-bridge-test.service';
 import { WindowToken } from 'src/window';
 import { BookmarksService } from '../bookmarks/bookmarks.service';
@@ -15,19 +11,6 @@ describe('KeyboardService', () => {
   let service: KeyboardService;
 
   beforeEach(() => {
-
-    spyOn(chromeExtensionBridgeTestService, 'readBookmarksTree').and.returnValue(of({
-      topLevelIds: testbookmarks.filter(x => x.parentId === "0").map(x => x.id),
-      bookmarks: testbookmarks as BookmarkBaseModel[]
-    }));
-
-    spyOn(chromeExtensionBridgeTestService, 'getLocal').and.returnValue(of({}));
-    spyOn(chromeExtensionBridgeTestService, 'storeLocal').and.returnValue(of());
-    chromeExtensionBridgeTestService.onBookmarkCreated$ = new Subject<{model: BookmarkBaseModel}>();
-    chromeExtensionBridgeTestService.onBookmarkRemoved$ = new Subject<{id: string, parentId: string}>();
-    chromeExtensionBridgeTestService.onBookmarkChanged$ = new Subject<{id: string, title: string, url: string}>();
-    chromeExtensionBridgeTestService.onBookmarkMoved$ = new Subject<{id: string, parentId: string, oldParentId: string, index: number, oldIndex: number}>();
-    chromeExtensionBridgeTestService.onBookmarkChildrenReordered$ = new Subject<{id: string, childIds: string[]}>();
 
     TestBed.configureTestingModule({
       providers: [
