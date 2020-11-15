@@ -66,9 +66,9 @@ function getExtensionWidth(settings: ApplicationSettings): string {
 function getRootFontSize(settings: ApplicationSettings): string {
   switch (settings.fontSize) {
     case 'compact':
-      return '10px';
+      return '9px';
     case 'regular':
-      return '12px';
+      return '11px';
     case 'large':
       return '16px';
   }
