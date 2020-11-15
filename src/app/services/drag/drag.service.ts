@@ -86,12 +86,20 @@ export class DragService {
 
     } else {
 
-      // Set the drag image to be a representation of the dragged element, and hide the original element
-      ev.dataTransfer.setDragImage((ev.target as HTMLElement).querySelector('.bookmark-icon'), -8, -4);
-      this.dragTarget$.next(this.bookmarkService.getBookmark(id));
-      this.window.requestAnimationFrame(() => { 
-        (ev.target as HTMLElement).classList.add('hidden');
-      });
+      // Set the drag image to be a representation of the dragged element
+      let icon = (ev.target as HTMLImageElement).querySelector('.bookmark-icon');
+      ev.dataTransfer.setDragImage(icon, -12, -8);
+
+      // Note: This timeout fixes a small jump at the start of the event on Windows
+      setTimeout(() => {
+
+        // Hide the original element
+        this.dragTarget$.next(this.bookmarkService.getBookmark(id));
+        this.window.requestAnimationFrame(() => { 
+          (ev.target as HTMLElement).classList.add('hidden');
+        });
+
+      }, 50);
 
     }
 
