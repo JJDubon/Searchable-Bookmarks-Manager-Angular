@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, fromEvent, merge, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -25,6 +26,7 @@ export class DragService {
   private hoverTarget: HoverTargetEvent;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     @Inject(WindowToken) private window: Window,
     private bookmarkService: BookmarksService) { 
 
@@ -34,6 +36,13 @@ export class DragService {
 
     this.hoverTarget$.subscribe(target => {
       this.hoverTarget = target;
+    });
+
+    // Force cursor on windows
+    fromEvent<DragEvent>(document, 'dragover').subscribe(ev => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      ev.dataTransfer.dropEffect = 'move';
     });
   
   }
@@ -161,7 +170,14 @@ export class DragService {
   }
 
   private onDragOver(id: string, ev: DragEvent): void {
+
+    // Force cursor on windows
+    ev.preventDefault();
+    ev.stopPropagation();
+    ev.dataTransfer.dropEffect = 'move';
+
     this.determineHoverType(id, ev);
+
   }
 
   private determineHoverType(id: string, ev: DragEvent): void {
