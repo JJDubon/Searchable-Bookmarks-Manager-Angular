@@ -70,7 +70,7 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   }
 
   public openIfMiddleClick(event: MouseEvent): void {
-    if (event.which === 2) {
+    if (event.which === 2 || event.button === 2) {
       this.bookmarksService.openInNewTab(this.bookmark);
     }
   }

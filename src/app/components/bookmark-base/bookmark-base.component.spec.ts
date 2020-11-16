@@ -46,10 +46,19 @@ describe('BookmarkBaseComponent', () => {
   }));
 
   beforeEach(() => {
+
     fixture = TestBed.createComponent(BookmarkBaseComponent);
     component = fixture.componentInstance;
     element = fixture.debugElement.nativeElement;
+
+    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
+    component.id = bookmark.id;
+    component.title = bookmark.title;
+    component.tooltip = bookmark.url;
+    component.icon = bookmark.url;
+
     fixture.detectChanges();
+
   });
 
   it('should create', () => {
@@ -59,13 +68,6 @@ describe('BookmarkBaseComponent', () => {
   it('should render expected bookmark information', () => {
 
     let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
-    component.id = bookmark.id;
-    component.title = bookmark.title;
-    component.tooltip = bookmark.url;
-    component.icon = bookmark.url;
-
-    component.ngOnInit();
-    fixture.detectChanges();
 
     expect((element.querySelector('.bookmark') as HTMLDivElement).title)
       .toBe(bookmark.url);
@@ -80,15 +82,7 @@ describe('BookmarkBaseComponent', () => {
 
   it('should set the active drag target', () => {
 
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
-    component.id = bookmark.id;
-    component.title = bookmark.title;
-    component.tooltip = bookmark.url;
-    component.icon = bookmark.url;
-
-    component.ngOnInit();
-    fixture.detectChanges();
-    
+    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;    
     let dragService = TestBed.inject(DragService);
     dragService.dragTarget$.next(bookmark);
     expect(component.dragTarget).toBe(bookmark);
@@ -96,15 +90,6 @@ describe('BookmarkBaseComponent', () => {
   });
 
   it('should determine if it is the active keyboard target', () => {
-
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
-    component.id = bookmark.id;
-    component.title = bookmark.title;
-    component.tooltip = bookmark.url;
-    component.icon = bookmark.url;
-
-    component.ngOnInit();
-    fixture.detectChanges();
 
     let keyboardService = TestBed.inject(KeyboardService);
     keyboardService.activeId$.next("9");
@@ -114,15 +99,6 @@ describe('BookmarkBaseComponent', () => {
   });
 
   it('should attach drag listeners', () => {
-
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
-    component.id = bookmark.id;
-    component.title = bookmark.title;
-    component.tooltip = bookmark.url;
-    component.icon = bookmark.url;
-
-    component.ngOnInit();
-    fixture.detectChanges();
 
     let dragService = TestBed.inject(DragService);
     spyOn(dragService, 'attachListeners').and.callFake(() => {

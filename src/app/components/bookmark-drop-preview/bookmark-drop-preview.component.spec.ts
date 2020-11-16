@@ -10,10 +10,9 @@ import { testbookmarks } from 'src/app/tests/data/test-bookmarks';
 import { chromeExtensionBridgeTestService } from 'src/app/tests/helpers/chrome-extension-bridge-test.service';
 import { WindowToken } from 'src/window';
 import { BookmarkBaseComponent } from '../bookmark-base/bookmark-base.component';
-
 import { BookmarkDropPreviewComponent } from './bookmark-drop-preview.component';
 
-fdescribe('BookmarkDropPreviewComponent', () => {
+describe('BookmarkDropPreviewComponent', () => {
   
   let component: BookmarkDropPreviewComponent;
   let element: HTMLElement;
@@ -59,7 +58,6 @@ fdescribe('BookmarkDropPreviewComponent', () => {
     
     let dragService = TestBed.inject(DragService);
     let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
-    component.ngOnInit();
     dragService.dragTarget$.next(bookmark);
 
     fixture.detectChanges();
@@ -71,7 +69,6 @@ fdescribe('BookmarkDropPreviewComponent', () => {
     
     let dragService = TestBed.inject(DragService);
     let bookmark = testbookmarks.find(x => x.id === "1") as BookmarkFolderModel;
-    component.ngOnInit();
     dragService.dragTarget$.next(bookmark);
 
     fixture.detectChanges();
@@ -83,7 +80,6 @@ fdescribe('BookmarkDropPreviewComponent', () => {
     
     let dragService = TestBed.inject(DragService);
     let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
-    component.ngOnInit();
     dragService.dragTarget$.next(bookmark);
 
     fixture.detectChanges();
