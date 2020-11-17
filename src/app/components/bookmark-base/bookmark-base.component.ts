@@ -19,7 +19,7 @@ export class BookmarkBaseComponent extends ComponentBase implements OnInit, Afte
   @Input() public tooltip: string;
   @Input() public icon: string;
   @Input() public draggable: boolean = true;
-  @Output() public selected = new EventEmitter<void>();
+  @Output() public selected = new EventEmitter<MouseEvent>();
   @ViewChild("wrapper") public wrapper: ElementRef;
 
   public hoverTarget: HoverTargetEvent;
@@ -77,7 +77,7 @@ export class BookmarkBaseComponent extends ComponentBase implements OnInit, Afte
 
   public emitClick(ev: MouseEvent): void {
     if (ev.button === 0) {
-      this.selected.next();
+      this.selected.emit(ev);
     }
   }
 

@@ -112,8 +112,8 @@ export class ChromeExtensionBridgeService {
   }
 
   public openInCurrentTab(url: string): void {
-    chrome.tabs.query({ active: true }, function([openWindow]) {
-      chrome.tabs.update(openWindow.id, {active: true, url: String(url)});
+    chrome.tabs.query({ active: true, currentWindow: true }, function([openWindow]) {
+      chrome.tabs.update(openWindow.id, { active: true, url: String(url) });
     });
   }
 
