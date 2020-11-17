@@ -77,7 +77,7 @@ describe('BookmarkListComponent', () => {
     component.loadBookmarks();
     fixture.detectChanges();
     
-    let ids = new Set<string>(component.bookmarks.map(x => x.id));
+    const ids = new Set<string>(component.bookmarks.map(x => x.id));
     expect(ids.has("9")).toBeTrue();
     expect(ids.has("5")).toBeTrue();
     expect(ids.has("7")).toBeTrue();

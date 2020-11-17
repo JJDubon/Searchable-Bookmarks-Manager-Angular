@@ -38,12 +38,12 @@ describe('BookmarksService', () => {
   });
 
   it('should get a bookmark', () => {
-    let bookmark = testbookmarks.filter(x => x.id === "1")[0];
+    const bookmark = testbookmarks.filter(x => x.id === "1")[0];
     expect(JSON.stringify(bookmark)).toBe(JSON.stringify(service.getBookmark("1")));
   });
 
   it('should toggle a folder open and closed', () => {
-    let folder = service.getBookmark("1") as BookmarkFolderModel;
+    const folder = service.getBookmark("1") as BookmarkFolderModel;
     expect(folder.isOpen).toBeTrue();
     service.toggleFolderOpenOrClosed("1");
     expect(folder.isOpen).toBeFalse();
@@ -53,7 +53,7 @@ describe('BookmarksService', () => {
 
   it('should create a bookmark', () => {
     
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'createBookmark').and.callFake(() => {});
     
     service.createBookmark("1", "Fake Title");
@@ -63,7 +63,7 @@ describe('BookmarksService', () => {
 
   it('should update a bookmark', () => {
     
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'updateBookmark').and.callFake(() => {});
     
     service.updateBookmark("1", { title: "Fake Title", url: "https://example.com" });
@@ -73,7 +73,7 @@ describe('BookmarksService', () => {
 
   it('should move a bookmark', () => {
     
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'moveBookmark').and.callFake(() => {});
     
     service.moveBookmark("99", "1", 0);
@@ -83,7 +83,7 @@ describe('BookmarksService', () => {
 
   it('should remove a bookmark', () => {
     
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'removeBookmark').and.callFake(() => {});
     
     service.removeBookmark("1");
@@ -93,7 +93,7 @@ describe('BookmarksService', () => {
 
   it('should remove a folder', () => {
     
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'removeFolder').and.callFake(() => {});
     
     service.removeFolder("1");
@@ -103,7 +103,7 @@ describe('BookmarksService', () => {
 
   it('should run a search', () => {
     
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'search').and.callFake(() => {
       return of([]);
     });
@@ -116,7 +116,7 @@ describe('BookmarksService', () => {
   it('should close a search', (doneFn) => {
     
     let initialSubscribe = true;
-    let sub$ = service.topLevelIds$.subscribe((ids) => {
+    const sub$ = service.topLevelIds$.subscribe((ids) => {
       if (initialSubscribe == true) {
         initialSubscribe = false;
       } else {
@@ -132,8 +132,8 @@ describe('BookmarksService', () => {
 
   it('should open a bookmark in a current tab', () => {
     
-    let bookmark = service.getBookmark("9") as BookmarkLinkModel;
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const bookmark = service.getBookmark("9") as BookmarkLinkModel;
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'openInCurrentTab').and.callFake(() => {
       return of([]);
     });
@@ -145,8 +145,8 @@ describe('BookmarksService', () => {
 
   it('should open a bookmark in a new tab', () => {
     
-    let bookmark = service.getBookmark("9") as BookmarkLinkModel;
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const bookmark = service.getBookmark("9") as BookmarkLinkModel;
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'openInNewTab').and.callFake(() => {
       return of([]);
     });
@@ -158,8 +158,8 @@ describe('BookmarksService', () => {
 
   it('should open a bookmark in a new window', () => {
     
-    let bookmark = service.getBookmark("9") as BookmarkLinkModel;
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const bookmark = service.getBookmark("9") as BookmarkLinkModel;
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'openInNewWindow').and.callFake(() => {
       return of([]);
     });
@@ -171,8 +171,8 @@ describe('BookmarksService', () => {
 
   it('should open a bookmark in a new incognito window', () => {
     
-    let bookmark = service.getBookmark("9") as BookmarkLinkModel;
-    let cxService = TestBed.inject(ChromeExtensionBridgeService);
+    const bookmark = service.getBookmark("9") as BookmarkLinkModel;
+    const cxService = TestBed.inject(ChromeExtensionBridgeService);
     spyOn(cxService, 'openInNewIWindow').and.callFake(() => {
       return of([]);
     });

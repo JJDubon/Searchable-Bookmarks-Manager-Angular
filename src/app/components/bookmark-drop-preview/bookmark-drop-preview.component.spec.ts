@@ -56,8 +56,8 @@ describe('BookmarkDropPreviewComponent', () => {
 
   it('should set the drag target', () => {
     
-    let dragService = TestBed.inject(DragService);
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
+    const dragService = TestBed.inject(DragService);
+    const bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
     dragService.dragTarget$.next(bookmark);
 
     fixture.detectChanges();
@@ -67,8 +67,8 @@ describe('BookmarkDropPreviewComponent', () => {
 
   it('should render a folder', () => {
     
-    let dragService = TestBed.inject(DragService);
-    let bookmark = testbookmarks.find(x => x.id === "1") as BookmarkFolderModel;
+    const dragService = TestBed.inject(DragService);
+    const bookmark = testbookmarks.find(x => x.id === "1") as BookmarkFolderModel;
     dragService.dragTarget$.next(bookmark);
 
     fixture.detectChanges();
@@ -78,8 +78,8 @@ describe('BookmarkDropPreviewComponent', () => {
 
   it('should render a bookmark', () => {
     
-    let dragService = TestBed.inject(DragService);
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
+    const dragService = TestBed.inject(DragService);
+    const bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
     dragService.dragTarget$.next(bookmark);
 
     fixture.detectChanges();

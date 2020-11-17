@@ -39,7 +39,7 @@ describe('KeyboardService', () => {
 
   it('should pull out the top bookmark when moving "up" with no initialization', (doneFn) => {
 
-    var sub = service.activeId$.subscribe((id: string) => {
+    const sub = service.activeId$.subscribe((id: string) => {
       if (id) {
         expect(id).toBe("__bookmark-manager");
         doneFn();
@@ -59,7 +59,7 @@ describe('KeyboardService', () => {
 
   it('should pull out the bottom bookmark when moving "down" with no initialization', (doneFn) => {
 
-    var sub = service.activeId$.subscribe((id: string) => {
+    const sub = service.activeId$.subscribe((id: string) => {
       if (id) {
         expect(id).toBe("1");
         doneFn();
@@ -79,7 +79,7 @@ describe('KeyboardService', () => {
 
   it('should be able to toggler a folder', () => {
 
-    let bookmarkService = TestBed.inject(BookmarksService);
+    const bookmarkService = TestBed.inject(BookmarksService);
     spyOn(bookmarkService, 'toggleFolderOpenOrClosed').and.callFake(() => {});
 
     document.dispatchEvent(new MouseEvent('mousemove'));

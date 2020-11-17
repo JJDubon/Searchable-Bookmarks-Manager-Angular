@@ -66,7 +66,7 @@ describe('BookmarkLinkComponent', () => {
 
   it('should open in the current tab', () => {
 
-    let bookmarkService = TestBed.inject(BookmarksService);
+    const bookmarkService = TestBed.inject(BookmarksService);
     spyOn(bookmarkService, 'openInCurrentTab');
 
     component.openBookmark(new MouseEvent('click', { ctrlKey: false }));
@@ -77,7 +77,7 @@ describe('BookmarkLinkComponent', () => {
 
   it('should open in the new tab on left click', () => {
 
-    let bookmarkService = TestBed.inject(BookmarksService);
+    const bookmarkService = TestBed.inject(BookmarksService);
     spyOn(bookmarkService, 'openInNewTab');
 
     component.openBookmark(new MouseEvent('click', { button: 1, ctrlKey: true }));
@@ -88,7 +88,7 @@ describe('BookmarkLinkComponent', () => {
 
   it('should open in the new tab on middle click', () => {
 
-    let bookmarkService = TestBed.inject(BookmarksService);
+    const bookmarkService = TestBed.inject(BookmarksService);
     spyOn(bookmarkService, 'openInNewTab');
 
     component.openIfMiddleClick(new MouseEvent('click', { button: 2 }));

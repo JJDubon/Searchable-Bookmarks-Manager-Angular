@@ -51,7 +51,7 @@ describe('BookmarkBaseComponent', () => {
     component = fixture.componentInstance;
     element = fixture.debugElement.nativeElement;
 
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
+    const bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
     component.id = bookmark.id;
     component.title = bookmark.title;
     component.tooltip = bookmark.url;
@@ -67,7 +67,7 @@ describe('BookmarkBaseComponent', () => {
 
   it('should render expected bookmark information', () => {
 
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
+    const bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;
 
     expect((element.querySelector('.bookmark') as HTMLDivElement).title)
       .toBe(bookmark.url);
@@ -82,8 +82,8 @@ describe('BookmarkBaseComponent', () => {
 
   it('should set the active drag target', () => {
 
-    let bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;    
-    let dragService = TestBed.inject(DragService);
+    const bookmark = testbookmarks.find(x => x.id === "9") as BookmarkLinkModel;    
+    const dragService = TestBed.inject(DragService);
     dragService.dragTarget$.next(bookmark);
     expect(component.dragTarget).toBe(bookmark);
 
@@ -91,7 +91,7 @@ describe('BookmarkBaseComponent', () => {
 
   it('should determine if it is the active keyboard target', () => {
 
-    let keyboardService = TestBed.inject(KeyboardService);
+    const keyboardService = TestBed.inject(KeyboardService);
     keyboardService.activeId$.next("9");
     expect(component.activeKeyboardTarget).toBeTrue();
 
@@ -100,7 +100,7 @@ describe('BookmarkBaseComponent', () => {
 
   it('should attach drag listeners', () => {
 
-    let dragService = TestBed.inject(DragService);
+    const dragService = TestBed.inject(DragService);
     spyOn(dragService, 'attachListeners').and.callFake(() => {
       return of().subscribe();
     });

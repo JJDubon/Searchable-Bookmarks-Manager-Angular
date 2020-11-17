@@ -28,7 +28,7 @@ describe('AllowUnsafePipe', () => {
 
     const testValue = 'test value';
     const domSanitizer = TestBed.inject(DomSanitizer);
-    const spy = spyOn(domSanitizer, 'bypassSecurityTrustUrl').and.returnValue(testValue);
+    spyOn(domSanitizer, 'bypassSecurityTrustUrl').and.returnValue(testValue);
 
     const pipe = TestBed.inject(AllowUnsafePipe);
     const result = pipe.transform(testValue);
