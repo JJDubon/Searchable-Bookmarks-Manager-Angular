@@ -13,7 +13,7 @@ import { BookmarkFolderComponent } from '../bookmark-folder/bookmark-folder.comp
 import { BookmarkLinkComponent } from '../bookmark-link/bookmark-link.component';
 import { BookmarkListComponent } from './bookmark-list.component';
 
-fdescribe('BookmarkListComponent', () => {
+describe('BookmarkListComponent', () => {
   
   let component: BookmarkListComponent;
   let element: HTMLElement;
