@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { Subject } from 'rxjs';
-
 import { ContextMenuService } from './context-menu.service';
 
 describe('ContextMenuService', () => {

@@ -2,14 +2,12 @@ import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AllowUnsafePipe } from 'src/app/pipes/allow-unsafe.pipe';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
 import { ChromeExtensionBridgeService } from 'src/app/services/chrome-extension-bridge/chrome-extension-bridge.service';
 import { chromeExtensionBridgeTestService } from 'src/app/tests/helpers/chrome-extension-bridge-test.service';
 import { WindowToken } from 'src/window';
 import { BookmarkBaseComponent } from '../bookmark-base/bookmark-base.component';
-
 import { BookmarkLinkComponent } from './bookmark-link.component';
 
 describe('BookmarkLinkComponent', () => {

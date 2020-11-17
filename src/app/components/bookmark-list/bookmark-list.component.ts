@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';

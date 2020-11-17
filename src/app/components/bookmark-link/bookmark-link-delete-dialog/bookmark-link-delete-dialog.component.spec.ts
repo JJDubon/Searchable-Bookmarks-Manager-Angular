@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { WindowToken } from 'src/window';
-
 import { BookmarkLinkDeleteDialogComponent } from './bookmark-link-delete-dialog.component';
 
 describe('BookmarkLinkDeleteDialogComponent', () => {

@@ -3,7 +3,6 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { ChromeExtensionBridgeService } from 'src/app/services/chrome-extension-bridge/chrome-extension-bridge.service';
 import { chromeExtensionBridgeTestService } from 'src/app/tests/helpers/chrome-extension-bridge-test.service';
 import { WindowToken } from 'src/window';
-
 import { BookmarkFolderAddLinkDialogComponent } from './bookmark-folder-add-link-dialog.component';
 
 describe('BookmarkFolderAddLinkDialogComponent', () => {
