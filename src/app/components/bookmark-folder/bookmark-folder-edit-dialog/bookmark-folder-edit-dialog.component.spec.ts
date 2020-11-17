@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { WindowToken } from 'src/window';
 
 import { BookmarkFolderEditDialogComponent } from './bookmark-folder-edit-dialog.component';
 
@@ -8,7 +10,24 @@ describe('BookmarkFolderEditDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BookmarkFolderEditDialogComponent ]
+      declarations: [ BookmarkFolderEditDialogComponent ],
+      imports: [
+        MatDialogModule
+      ],
+      providers: [ 
+        {
+          provide: WindowToken,
+          useValue: window
+        },
+        { 
+          provide: MAT_DIALOG_DATA, 
+          useValue: {} 
+        },
+        {
+          provide: MatDialogRef,
+          useValue: {}
+        }
+      ]
     })
     .compileComponents();
   }));

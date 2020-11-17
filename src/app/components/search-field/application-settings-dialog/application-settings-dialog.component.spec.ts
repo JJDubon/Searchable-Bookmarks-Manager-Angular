@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { WindowToken } from 'src/window';
 
 import { ApplicationSettingsDialogComponent } from './application-settings-dialog.component';
 
@@ -8,7 +10,21 @@ describe('ApplicationSettingsDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApplicationSettingsDialogComponent ]
+      declarations: [ ApplicationSettingsDialogComponent ],
+      providers: [ 
+        {
+          provide: WindowToken,
+          useValue: window
+        },
+        { 
+          provide: MAT_DIALOG_DATA, 
+          useValue: {} 
+        },
+        {
+          provide: MatDialogRef,
+          useValue: {}
+        }
+      ]
     })
     .compileComponents();
   }));

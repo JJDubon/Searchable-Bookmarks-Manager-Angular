@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { ApplicationSettings } from 'src/app/models/application-settings';
 import { WindowToken } from 'src/window';
@@ -14,10 +15,13 @@ describe('ApplicationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        MatDialogModule
+      ],
       providers: [
         {
           provide: WindowToken,
-          useValue: {}
+          useValue: window
         },
         {
           provide: DOCUMENT,
@@ -57,7 +61,7 @@ describe('ApplicationService', () => {
     expect(document.querySelector).toHaveBeenCalledWith('main');
     expect(document.querySelector).toHaveBeenCalledWith('html');
     expect(fakeMainStyleObj.style.width).toBe('400px');
-    expect(fakeHtmlStyleObj.style.fontSize).toBe('12px');
+    expect(fakeHtmlStyleObj.style.fontSize).toBe('11px');
 
   });
 

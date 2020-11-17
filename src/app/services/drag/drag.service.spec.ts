@@ -24,7 +24,7 @@ describe('DragService', () => {
         },
         {
           provide: DOCUMENT,
-          useValue: { querySelector: () => {} }
+          useValue: document
         },
         {
           provide: ChromeExtensionBridgeService,
