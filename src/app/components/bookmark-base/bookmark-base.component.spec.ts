@@ -37,7 +37,7 @@ describe('BookmarkBaseComponent', () => {
         }
       ]
     })
-    // Note: This call to "overrideComponent" fixes a node bug with OnPush change detection strategy and unit testing
+    // Note: This call to "overrideComponent" fixes a known bug with OnPush change detection strategy and unit testing
     .overrideComponent(BookmarkBaseComponent, {
       set: { changeDetection: ChangeDetectionStrategy.Default }
     })

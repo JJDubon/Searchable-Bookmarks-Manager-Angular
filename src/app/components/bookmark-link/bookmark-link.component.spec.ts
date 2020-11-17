@@ -12,7 +12,7 @@ import { BookmarkBaseComponent } from '../bookmark-base/bookmark-base.component'
 
 import { BookmarkLinkComponent } from './bookmark-link.component';
 
-fdescribe('BookmarkLinkComponent', () => {
+describe('BookmarkLinkComponent', () => {
 
   let component: BookmarkLinkComponent;
   let element: HTMLElement;
@@ -39,7 +39,7 @@ fdescribe('BookmarkLinkComponent', () => {
         }
       ]
     })
-    // Note: This call to "overrideComponent" fixes a node bug with OnPush change detection strategy and unit testing
+    // Note: This call to "overrideComponent" fixes a known bug with OnPush change detection strategy and unit testing
     .overrideComponent(BookmarkLinkComponent, {
       set: { changeDetection: ChangeDetectionStrategy.Default }
     })
