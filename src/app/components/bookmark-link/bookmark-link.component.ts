@@ -62,7 +62,7 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   }
 
   public openBookmark(event: MouseEvent): void {
-    if ( (event.which === 1 || event.button === 1) && event.ctrlKey) {
+    if (event.button === 0 && event.ctrlKey) {
       this.bookmarksService.openInNewTab(this.bookmark);
     } else {
       this.bookmarksService.openInCurrentTab(this.bookmark);
@@ -70,7 +70,7 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   }
 
   public openIfMiddleClick(event: MouseEvent): void {
-    if (event.which === 2 || event.button === 2) {
+    if (event.button === 1) {
       this.bookmarksService.openInNewTab(this.bookmark);
     }
   }
