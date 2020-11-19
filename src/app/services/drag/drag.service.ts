@@ -63,20 +63,20 @@ export class DragService {
     const dragOver = fromEvent<DragEvent>(element.nativeElement, 'dragover').pipe(map(ev => dragEvToExt(ev, 'dragover')));
 
     // Combine drag events into one subscription so it can be easily removed from memory in the component that calls this method
-    return merge(dragStart, dragEnd, dragEnter, dragOver).subscribe((event: DragEventExt) => {
+    return merge(dragStart, dragEnd, dragEnter, dragOver).subscribe((ev: DragEventExt) => {
 
-      switch (event.serviceEventType) {
+      switch (ev.serviceEventType) {
         case 'dragstart':
-          this.onDragStart(id, event);
+          this.onDragStart(id, ev);
           break;
         case 'dragend':
-          this.onDragEnd(event);
+          this.onDragEnd(ev);
           break;
         case 'dragenter':
-          this.onDragEnter(id, event);
+          this.onDragEnter(id, ev);
           break;
         case 'dragover':
-          this.onDragOver(id, event);
+          this.onDragOver(id, ev);
           break;
       }
 
@@ -202,8 +202,8 @@ export class DragService {
 
 }
 
-function dragEvToExt(event: DragEvent, type: DragEventTypes): DragEventExt {
-  const ext = event as DragEventExt;
+function dragEvToExt(ev: DragEvent, type: DragEventTypes): DragEventExt {
+  const ext = ev as DragEventExt;
   ext.serviceEventType = type;
   return ext;
 }
