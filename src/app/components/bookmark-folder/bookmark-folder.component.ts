@@ -141,7 +141,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
     dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { title: string }) => {
       if (result) {
-        this.bookmarksService.createBookmark(this.bookmark.id, result.title ?? '');
+        this.bookmarksService.createBookmark(this.bookmark.id, result.title ?? '', null, 0);
       }
     });
   }
@@ -155,7 +155,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
     dialogRef.afterClosed().pipe(takeUntil(this.onDestroy$)).subscribe((result: { title: string, url: string }) => {
       if (result) {
-        this.bookmarksService.createBookmark(this.bookmark.id, result.title ?? '', result.url ?? '');
+        this.bookmarksService.createBookmark(this.bookmark.id, result.title ?? '', result.url ?? '', 0);
       }
     });
   }

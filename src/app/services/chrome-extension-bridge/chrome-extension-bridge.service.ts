@@ -77,11 +77,11 @@ export class ChromeExtensionBridgeService {
 
   }
 
-  public createBookmark(parentId: string, title: string, url: string = null): void {
+  public createBookmark(parentId: string, title: string, url: string = null, index: number = 0): void {
     if (url) {
-      chrome.bookmarks.create({ parentId, title, url });
+      chrome.bookmarks.create({ parentId, title, url, index });
     } else {
-      chrome.bookmarks.create({ parentId, title });
+      chrome.bookmarks.create({ parentId, title, index });
     }
   }
 

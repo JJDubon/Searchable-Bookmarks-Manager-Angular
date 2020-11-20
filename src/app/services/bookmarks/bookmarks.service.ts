@@ -93,8 +93,8 @@ export class BookmarksService {
     }
   }
 
-  public createBookmark(parentId: string, title: string, url: string = null): void {
-    this.chromeExtensionBridge.createBookmark(parentId, title, url);
+  public createBookmark(parentId: string, title: string, url: string = null, index: number = 0): void {
+    this.chromeExtensionBridge.createBookmark(parentId, title, url, index);
   }
 
   public updateBookmark(id: string, updateInfo: Partial<{title: string, url: string}>): void {
