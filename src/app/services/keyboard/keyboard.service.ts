@@ -10,6 +10,10 @@ import { BookmarksService } from '../bookmarks/bookmarks.service';
 
 type BookmarkListNode = { prev: BookmarkListNode, next: BookmarkListNode, model: BookmarkBaseModel };
 
+const ignoredKeyboardEvents = new Set<string>([
+  'Meta', 'Control', 'Shift', 'Alt', 'CapsLock'
+]);
+
 @Injectable({
   providedIn: 'root'
 })
@@ -91,7 +95,7 @@ export class KeyboardService {
       }
 
       // Otherwise, on keydown focus the search input
-      else {
+      else if (!ignoredKeyboardEvents.has(ev.key)) {
         this.keyboardInput$.next();
         this.setActiveId(null);
       }
