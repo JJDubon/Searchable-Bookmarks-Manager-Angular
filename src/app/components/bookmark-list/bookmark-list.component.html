@@ -1,21 +1,6 @@
 <ol>
-  <li *ngFor="let bookmark of bookmarks; let i = index; trackBy: trackById">
-
-    <!-- Note: Function binding (in *ngIf) is fine because we are using the OnPush change detection strategy -->
-    <ng-container *ngIf="showDragTopPreview(i)" [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
-
+  <li *ngFor="let bookmark of bookmarks; let i = index; trackBy: trackById" [ngClass]="{ 'drag-top': showDragTopPreview(i), 'drag-bot': showDragBottomPreview(i) }">
     <app-bookmark-folder *ngIf="bookmark.type === BookmarkTypes.Folder" [bookmarkId]="bookmark.id"></app-bookmark-folder>
     <app-bookmark-link *ngIf="bookmark.type === BookmarkTypes.Link" [bookmarkId]="bookmark.id"></app-bookmark-link>
-
-    <!-- Note: Function binding (in *ngIf) is fine because we are using the OnPush change detection strategy -->
-    <ng-container *ngIf="showDragBottomPreview(i)" [ngTemplateOutlet]="dropPreview" [ngTemplateOutletContext]="{ bookmark: dragTarget }"></ng-container>
-
   </li>
 </ol>
-
-<ng-template #dropPreview let-bookmark="bookmark">
-  <div class="bookmark-drop-preview">
-    <app-bookmark-base [id]="bookmark.id" [title]="bookmark.title" [draggable]="false"
-                       [icon]="bookmark.type === BookmarkTypes.Folder ? '/assets/images/folder.svg' : bookmark.icon"></app-bookmark-base>
-  </div>
-</ng-template>

@@ -186,16 +186,56 @@ export class DragService {
     const targetRect = (ev.target as HTMLElement).getBoundingClientRect();
     const eventY = ev.y;
 
+    // Determine what vertical position this event took place in the element
+    const elStart = targetRect.y;
+    const elEnd = targetRect.y + targetRect.height;
+    const precisionAsPercent = (eventY - elStart) / (elEnd - elStart);
+    
     // Determine hover behavior
-    const isTopHalf = eventY < (targetRect.y + (targetRect.height/2));
     const isFolder = targetItem.type === BookmarkTypes.Folder;
-    const isOpen = isFolder && (targetItem as BookmarkFolderModel).isOpen === true
-    if ( (isOpen && !isTopHalf) || (isFolder && !targetItem.modifiable) ) {
+    const isOpen = isFolder && (targetItem as BookmarkFolderModel).isOpen === true;
+    const isModifiableFolder = isFolder && targetItem.modifiable;
+    if (isModifiableFolder) {
+
+      if (isOpen) {
+
+        // If the folder is open than anything below 75% places the item inside of the folder
+        if (precisionAsPercent <= 0.25) {
+          this.hoverTarget$.next({ id, type: 'top' });
+        } else {
+          this.hoverTarget$.next({ id, type: 'inside' });
+        }
+
+      } else {
+
+        // If the folder is closed, the top 25% is above, the bottom 25% is below, and the middle
+        // 50% places the item inside of the folder
+        if (precisionAsPercent <= 0.25) {
+          this.hoverTarget$.next({ id, type: 'top' });
+        } else if (precisionAsPercent >= 0.75) {
+          this.hoverTarget$.next({ id, type: 'bottom' });
+        } else {
+          this.hoverTarget$.next({ id, type: 'inside' });
+        }
+
+      }
+
+    } else if (isFolder) {
+
+      // If the folder is not modifiable, always place inside
       this.hoverTarget$.next({ id, type: 'inside' });
-    } else if (isTopHalf) {
-      this.hoverTarget$.next({ id, type: 'top' });
+
     } else {
-      this.hoverTarget$.next({ id, type: 'bottom' });
+
+      // Place the item above or below the link based on whether the event takes place in the top
+      // 50% of the element or the bottom 50%.
+      const isTopHalf = precisionAsPercent <= 0.5;
+      if (isTopHalf) {
+        this.hoverTarget$.next({ id, type: 'top' });
+      } else {
+        this.hoverTarget$.next({ id, type: 'bottom' });
+      }
+
     }
 
   }
