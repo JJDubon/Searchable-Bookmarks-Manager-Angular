@@ -215,12 +215,12 @@ export class BookmarksService {
       // Remove the bookmark from its parent's "children" member
       const parent = this.bookmarksMap[parentId] as BookmarkFolderModel;
       if (parent) {
-        parent.children = parent.children.filter(x => x !== id);
+        parent.children = parent.children?.filter(x => x !== id);
         this.bookmarkChanged$.next(parent);
       }
 
-      this.managerNodeIds = this.managerNodeIds.filter(x => x !== id);
-      this.searchResultIds = this.searchResultIds.filter(x => x !== id);
+      this.managerNodeIds = this.managerNodeIds?.filter(x => x !== id);
+      this.searchResultIds = this.searchResultIds?.filter(x => x !== id);
       if (this.searchQuerySubscription) {
         this.topLevelIds$.next(this.searchResultIds);
       } else {
