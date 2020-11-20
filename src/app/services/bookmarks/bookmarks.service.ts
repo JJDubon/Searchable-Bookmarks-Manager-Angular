@@ -87,8 +87,10 @@ export class BookmarksService {
 
   public toggleFolderOpenOrClosed(id: string): void {
     const folder = this.bookmarksMap[id] as BookmarkFolderModel;
-    folder.isOpen = !folder.isOpen;
-    this.bookmarkChanged$.next(folder);
+    if (folder) {
+      folder.isOpen = !folder.isOpen;
+      this.bookmarkChanged$.next(folder);
+    }
   }
 
   public createBookmark(parentId: string, title: string, url: string = null): void {
@@ -215,6 +217,14 @@ export class BookmarksService {
       if (parent) {
         parent.children = parent.children.filter(x => x !== id);
         this.bookmarkChanged$.next(parent);
+      }
+
+      this.managerNodeIds = this.managerNodeIds.filter(x => x !== id);
+      this.searchResultIds = this.searchResultIds.filter(x => x !== id);
+      if (this.searchQuerySubscription) {
+        this.topLevelIds$.next(this.searchResultIds);
+      } else {
+        this.topLevelIds$.next(this.managerNodeIds);
       }
 
     });
