@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApplicationSettings, defaultAppSettings } from 'src/app/models/application-settings';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
@@ -33,18 +33,21 @@ export class StorageService {
   }
 
   public getApplicationSettings(): Observable<ApplicationSettings> {
-    return this.chromeExtensionBridge.getLocal(null).pipe(map(settings => {
+    return forkJoin([
+      this.chromeExtensionBridge.getLocal("appSettings30.fontSize"),
+      this.chromeExtensionBridge.getLocal("appSettings30.pageWidth")
+    ]).pipe(map(([fontSize, pageWidth]) => {
       let applicationSettings = defaultAppSettings;
-      applicationSettings.fontSize = settings.fontSize ?? defaultAppSettings.fontSize;
-      applicationSettings.pageWidth = settings.pageWidth ?? defaultAppSettings.pageWidth;
+      applicationSettings.fontSize = fontSize ?? defaultAppSettings.fontSize;
+      applicationSettings.pageWidth = pageWidth ?? defaultAppSettings.pageWidth;
       return applicationSettings;
     }));
   }
 
   public setApplicationSettings(applicationSettings: ApplicationSettings): Observable<any> {
     return combineLatest([
-      this.chromeExtensionBridge.storeLocal('fontSize', applicationSettings.fontSize),
-      this.chromeExtensionBridge.storeLocal('pageWidth', applicationSettings.pageWidth)
+      this.chromeExtensionBridge.storeLocal('appSettings30.fontSize', applicationSettings.fontSize),
+      this.chromeExtensionBridge.storeLocal('appSettings30.pageWidth', applicationSettings.pageWidth)
     ]);
   }
 
