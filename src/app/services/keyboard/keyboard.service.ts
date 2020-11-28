@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, fromEvent, Subject, Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
@@ -27,6 +28,7 @@ export class KeyboardService {
   private topLevelIds: string[];
   private activeId: string;
   private listMap: { [id: string]: BookmarkListNode };
+  private togglingFolderOpenOrClosed = false;
 
   constructor(
     @Inject(WindowToken) private window: Window,
@@ -59,6 +61,10 @@ export class KeyboardService {
         // If the bookmark is a folder, open/close it
         if (bookmark.type === BookmarkTypes.Folder) {
           this.bookmarksService.toggleFolderOpenOrClosed(bookmark.id);
+          this.togglingFolderOpenOrClosed = true;
+          setTimeout(() => {
+            this.togglingFolderOpenOrClosed = false;
+          }, 110);
         } 
         
         // Otherwise, open the bookmark in the current tab
@@ -103,18 +109,22 @@ export class KeyboardService {
     });
 
     // Stop listening when the mouse moves
-    const mouseMoveSubscription = fromEvent<MouseEvent>(this.document, 'mousemove').subscribe(() => {
-      if (this.activeId) {
-        this.setActiveId(null);
-      }
-    });
+    const mouseMoveSubscription = fromEvent<MouseEvent>(this.document, 'mousemove')
+      .pipe(takeWhile(() => !this.togglingFolderOpenOrClosed, true))
+      .subscribe(() => {
+        if (this.activeId) {
+          this.setActiveId(null);
+        }
+      });
 
     // Stop listening when a click occurs
-    const clickSubscription = fromEvent<MouseEvent>(this.document, 'click').subscribe(() => {
-      if (this.activeId) {
-        this.setActiveId(null);
-      }
-    });
+    const clickSubscription = fromEvent<MouseEvent>(this.document, 'click')
+      .pipe(takeWhile(() => !this.togglingFolderOpenOrClosed, true))
+      .subscribe(() => {
+        if (this.activeId) {
+          this.setActiveId(null);
+        }
+      });
 
     // Store all subscriptions so they can later be destroyed
     this.subscriptions.push(topLevelIdsSubscription);
