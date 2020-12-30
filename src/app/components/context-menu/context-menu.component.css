@@ -2,3 +2,8 @@
   visibility: hidden; 
   position: fixed
 }
+
+.mat-menu-item {
+  line-height: 38px;
+  height: 38px;
+}
