@@ -44,6 +44,27 @@ export class DragService {
       ev.stopPropagation();
       ev.dataTransfer.dropEffect = 'move';
     });
+
+    // Fix a bug on windows where a selection may break the HTML5 drag-and-drop functionality
+    let timeout: number = null;
+    fromEvent<MouseEvent>(document, 'mousedown').subscribe(ev => {
+
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+
+      timeout = setTimeout(() => {
+        this.dragTarget$.next(null);
+        this.hoverTarget$.next(null);
+        this.document.getSelection().removeAllRanges();
+        this.window.requestAnimationFrame(() => { 
+          document.querySelectorAll('.hidden').forEach((el) => {
+            el.classList.remove('hidden');
+          });
+        });
+      }, 50);
+
+    });
   
   }
 
@@ -64,6 +85,11 @@ export class DragService {
 
     // Combine drag events into one subscription so it can be easily removed from memory in the component that calls this method
     return merge(dragStart, dragEnd, dragEnter, dragOver).subscribe((ev: DragEventExt) => {
+
+      if (ev.dataTransfer && ev.serviceEventType != 'dragend') {
+        let icon = this.document.querySelector('img[data-icon-id="' + id + '"]');
+        ev.dataTransfer.setDragImage(icon, -12, -8);
+      }
 
       switch (ev.serviceEventType) {
         case 'dragstart':
@@ -96,7 +122,7 @@ export class DragService {
     } else {
 
       // Set the drag image to be a representation of the dragged element
-      let icon = (ev.target as HTMLImageElement).querySelector('.bookmark-icon');
+      let icon = this.document.querySelector('img[data-icon-id="' + id + '"]');
       ev.dataTransfer.setDragImage(icon, -12, -8);
 
       // Note: This timeout fixes a small jump at the start of the event on Windows
@@ -125,6 +151,12 @@ export class DragService {
     this.window.requestAnimationFrame(() => { 
       (ev.target as HTMLElement).classList.remove('hidden');
     });
+
+    // Fix a bug on windows where drag functionality may break if a user clicks multiple times very quickly, slightly moving
+    // the mouse between each click
+    if (dragTarget == null || hoverTarget == null) {
+      return;
+    }
 
     // If there is a proper hover target, perform the drop logic
     if (hoverTarget != null) {
