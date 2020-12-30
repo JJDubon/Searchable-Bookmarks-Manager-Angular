@@ -46,7 +46,9 @@ export class KeyboardService {
     const keyupSubscription = fromEvent<KeyboardEvent>(this.document, 'keydown').subscribe((ev) => {
 
       // Ignore keyboard events if a cdk dialog is open
-      if (document.getElementsByTagName("mat-dialog-container").length !== 0) {
+      var dialogContainerOpen = document.getElementsByTagName("mat-dialog-container").length !== 0;
+      var cdkBackdropVisible = this.document.querySelectorAll('.cdk-overlay-backdrop').length !== 0;
+      if (dialogContainerOpen || cdkBackdropVisible) {
         return;
       }
 
