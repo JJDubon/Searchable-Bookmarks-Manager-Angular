@@ -2,6 +2,6 @@
 <div class="context-menu" [style.left.px]="contextMenuPosition.x" [style.top.px]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu"> </div>
 <mat-menu #contextMenu="matMenu">
 	<ng-template matMenuContent let-item="item">
-		<button *ngFor="let item of (items || [])" mat-menu-item (click)="emitItemSelected(item.id)">{{item.text}}</button>
+		<button *ngFor="let item of (items || [])" mat-menu-item (click)="emitItemSelected(item.id)" [ngClass]="item.topSeparator ? 'top-separator' : ''">{{item.text}}</button>
 	</ng-template>
 </mat-menu>

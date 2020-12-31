@@ -105,20 +105,20 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     contextMenuOptions.push({ id: 'addBookmark', text: 'Add Bookmark' });
 
     if (this.bookmark.modifiable) {
-      contextMenuOptions.push({ id: 'copyBookmark', text: 'Copy' });
+      contextMenuOptions.push({ id: 'copyBookmark', text: 'Copy', topSeparator: true });
       contextMenuOptions.push({ id: 'cutBookmark', text: 'Cut' });
     }
 
     if (this.clipboardService.getClipboard()) {
-      contextMenuOptions.push({ id: 'pasteBookmark', text: 'Paste' });
+      contextMenuOptions.push({ id: 'pasteBookmark', text: 'Paste', topSeparator: !this.bookmark.modifiable });
     }
 
     if (this.bookmark.modifiable) {
-      contextMenuOptions.push({ id: 'editFolder', text: 'Edit Folder' });
+      contextMenuOptions.push({ id: 'editFolder', text: 'Edit Folder', topSeparator: true });
       contextMenuOptions.push({ id: 'deleteFolder', text: 'Delete Folder' });
     }
 
-    contextMenuOptions.push({ id: 'toggleDefaultOpenState', text: this.isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default' });
+    contextMenuOptions.push({ id: 'toggleDefaultOpenState', text: this.isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default', topSeparator: true });
 
     this.contextMenuService.openContextMenu(contextMenuOptions).pipe(takeUntil(this.onDestroy$)).subscribe(selectedOptionId => {
       this.contextItemSelected(selectedOptionId)

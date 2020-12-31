@@ -56,16 +56,16 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
     contextMenuOptions.push({ id: 'openNewIWindow', text: 'Open in New Incognito Window' });
 
     if (this.bookmark.modifiable) {
-      contextMenuOptions.push({ id: 'copyBookmark', text: 'Copy' });
+      contextMenuOptions.push({ id: 'copyBookmark', text: 'Copy', topSeparator: true });
       contextMenuOptions.push({ id: 'cutBookmark', text: 'Cut' });
     }
 
     if (this.clipboardService.getClipboard()) {
-      contextMenuOptions.push({ id: 'pasteBookmark', text: 'Paste' });
+      contextMenuOptions.push({ id: 'pasteBookmark', text: 'Paste', topSeparator: !this.bookmark.modifiable });
     }
 
     if (this.bookmark.modifiable) {
-      contextMenuOptions.push({ id: 'editBookmark', text: 'Edit Bookmark' });
+      contextMenuOptions.push({ id: 'editBookmark', text: 'Edit Bookmark', topSeparator: true });
       contextMenuOptions.push({ id: 'deleteBookmark', text: 'Delete Bookmark' });
     }
 

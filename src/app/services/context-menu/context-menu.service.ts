@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-export type ContextMenuItem = { id: string, text: string };
+export type ContextMenuItem = { id: string, text: string, topSeparator?: boolean };
 
 @Injectable({
   providedIn: 'root'
