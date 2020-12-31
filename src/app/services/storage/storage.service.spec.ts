@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ApplicationSettings } from 'src/app/models/application-settings';
 import { chromeExtensionBridgeTestService } from '../../tests/helpers/chrome-extension-bridge-test.service';
 import { ChromeExtensionBridgeService } from '../chrome-extension-bridge/chrome-extension-bridge.service';
@@ -88,7 +89,16 @@ describe('StorageService', () => {
     });
 
     const chromeExtensionBridge = TestBed.inject(ChromeExtensionBridgeService);
-    spyOn(chromeExtensionBridge, 'getLocal').and.callFake(() => fakeStorageObs);
+    spyOn(chromeExtensionBridge, 'getLocal').and.callFake((arg) => {
+      switch (arg) {
+        case 'appSettings30.fontSize':
+          return fakeStorageObs.pipe(map(x => x.fontSize));
+        case 'appSettings30.pageWidth':
+          return fakeStorageObs.pipe(map(x => x.pageWidth));
+        default:
+          return null;
+      }
+    });
 
     const obs = service.getApplicationSettings();
     const settings = await obs.toPromise();
@@ -108,8 +118,8 @@ describe('StorageService', () => {
     settings.pageWidth = 'regular';
 
     await service.setApplicationSettings(settings).toPromise();
-    expect(chromeExtensionBridge.storeLocal).toHaveBeenCalledWith('fontSize', settings.fontSize);
-    expect(chromeExtensionBridge.storeLocal).toHaveBeenCalledWith('pageWidth', settings.pageWidth);
+    expect(chromeExtensionBridge.storeLocal).toHaveBeenCalledWith('appSettings30.fontSize', settings.fontSize);
+    expect(chromeExtensionBridge.storeLocal).toHaveBeenCalledWith('appSettings30.pageWidth', settings.pageWidth);
 
   });
 
