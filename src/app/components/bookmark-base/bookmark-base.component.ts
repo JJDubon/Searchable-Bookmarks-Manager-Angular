@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BookmarkBaseModel } from 'src/app/models/bookmark-base.model';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { DragService, HoverTargetEvent } from 'src/app/services/drag/drag.service';
 import { KeyboardService } from 'src/app/services/keyboard/keyboard.service';
 import { ComponentBase } from '../component-base';
@@ -25,10 +26,14 @@ export class BookmarkBaseComponent extends ComponentBase implements OnInit, Afte
   public hoverTarget: HoverTargetEvent;
   public dragTarget: BookmarkBaseModel;
   public activeKeyboardTarget = false;
+  public isOnClipboard = false;
 
   private drag$: Subscription;
 
-  constructor(private cd: ChangeDetectorRef, private dragService: DragService, private keyboardService: KeyboardService) { 
+  constructor(private cd: ChangeDetectorRef, 
+    private dragService: DragService, 
+    private keyboardService: KeyboardService,
+    private clipboardService: ClipboardService) { 
     super();
   }
 
@@ -60,6 +65,15 @@ export class BookmarkBaseComponent extends ComponentBase implements OnInit, Afte
         this.cd.detectChanges();
       }
 
+    });
+
+    // If this bookmark is the active clipboard target, give the user visual feedback
+    this.clipboardService.itemId$.pipe(takeUntil(this.onDestroy$)).subscribe(clipboardItemId => {
+      let isOnClipboard = clipboardItemId === this.id;
+      if (this.isOnClipboard != isOnClipboard) {
+        this.isOnClipboard = isOnClipboard;
+        this.cd.detectChanges();
+      }
     });
 
   }

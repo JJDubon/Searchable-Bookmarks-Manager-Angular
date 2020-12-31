@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkFolderModel } from 'src/app/models/bookmark-folder.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ComponentBase } from '../component-base';
@@ -43,8 +44,9 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
 
   public bookmark: BookmarkFolderModel;
   public state: 'open' | 'closed' = 'closed';
-  public contextMenuOptions: ContextMenuItem[];
   public visible = true;
+
+  private isOpenByDefault = false;
 
   constructor(
     private cd: ChangeDetectorRef, 
@@ -52,7 +54,8 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     private dialog: MatDialog, 
     private contextMenuService: ContextMenuService,
     private bookmarksService: BookmarksService,
-    private storageService: StorageService) { 
+    private storageService: StorageService,
+    private clipboardService: ClipboardService) { 
     super();
   }
 
@@ -74,18 +77,9 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
     this.state = this.bookmark.isOpen ? 'open' : 'closed';
     this.visible = this.bookmark.isOpen;
 
-    // Determine which context menu options this folder will display
-    this.contextMenuOptions = [];
-    this.contextMenuOptions.push({ id: 'addFolder', text: 'Add Folder' });
-    this.contextMenuOptions.push({ id: 'addBookmark', text: 'Add Bookmark' });
-    if (this.bookmark.modifiable) {
-      this.contextMenuOptions.push({ id: 'editFolder', text: 'Edit Folder' });
-      this.contextMenuOptions.push({ id: 'deleteFolder', text: 'Delete Folder' });
-    }
-
     // Give the user the ability to mark any folder as open by default
     this.storageService.getOpenByDefault(this.bookmarkId).pipe(takeUntil(this.onDestroy$)).subscribe((isOpenByDefault) => {
-      this.contextMenuOptions.push({ id: 'toggleDefaultOpenState', text: isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default' });
+      this.isOpenByDefault = isOpenByDefault;
     });
 
   }
@@ -102,10 +96,34 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
   }
 
   public triggerContextMenu(ev: MouseEvent): void {
+
     ev.preventDefault();
-    this.contextMenuService.openContextMenu(this.contextMenuOptions).pipe(takeUntil(this.onDestroy$)).subscribe(selectedOptionId => {
+
+    let contextMenuOptions: ContextMenuItem[] = [];
+
+    contextMenuOptions.push({ id: 'addFolder', text: 'Add Folder' });
+    contextMenuOptions.push({ id: 'addBookmark', text: 'Add Bookmark' });
+
+    if (this.bookmark.modifiable) {
+      contextMenuOptions.push({ id: 'copyBookmark', text: 'Copy' });
+      contextMenuOptions.push({ id: 'cutBookmark', text: 'Cut' });
+    }
+
+    if (this.clipboardService.getClipboard()) {
+      contextMenuOptions.push({ id: 'pasteBookmark', text: 'Paste' });
+    }
+
+    if (this.bookmark.modifiable) {
+      contextMenuOptions.push({ id: 'editFolder', text: 'Edit Folder' });
+      contextMenuOptions.push({ id: 'deleteFolder', text: 'Delete Folder' });
+    }
+
+    contextMenuOptions.push({ id: 'toggleDefaultOpenState', text: this.isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default' });
+
+    this.contextMenuService.openContextMenu(contextMenuOptions).pipe(takeUntil(this.onDestroy$)).subscribe(selectedOptionId => {
       this.contextItemSelected(selectedOptionId)
     });
+
   }
 
   private contextItemSelected(id: string): void {
@@ -117,6 +135,15 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
           break;
         case 'addBookmark':
           this.addBookmarkDialog();
+          break;
+        case 'copyBookmark':
+          this.clipboardService.setClipboard(this.bookmark.id, 'copy');
+          break;
+        case 'cutBookmark':
+          this.clipboardService.setClipboard(this.bookmark.id, 'cut');
+          break;
+        case 'pasteBookmark':
+          this.clipboardService.pasteClipboard(this.bookmark.id);
           break;
         case 'deleteFolder':
           this.openDeleteDialog();
@@ -197,7 +224,7 @@ export class BookmarkFolderComponent extends ComponentBase implements OnInit {
         this.storageService.storeOpenByDefault(this.bookmarkId).subscribe();
       }
 
-      this.contextMenuOptions.find(x => x.id === 'toggleDefaultOpenState').text = !isOpenByDefault ? 'Set Closed By Default' : 'Set Open By Default';
+      this.isOpenByDefault = isOpenByDefault;
     });
   }
 

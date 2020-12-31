@@ -48,3 +48,7 @@
 .hover-inside {
   background-color: lightgray;
 }
+
+.clipboard-target > .bookmark-icon {
+  opacity: 50%;
+}

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BookmarkLinkModel } from 'src/app/models/bookmark-link.model';
 import { BookmarksService } from 'src/app/services/bookmarks/bookmarks.service';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { ContextMenuItem, ContextMenuService } from 'src/app/services/context-menu/context-menu.service';
 import { ComponentBase } from '../component-base';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
@@ -21,14 +22,14 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
   @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
   public bookmark: BookmarkLinkModel;
-  public contextMenuOptions: ContextMenuItem[];
 
   constructor(
     private cd: ChangeDetectorRef, 
     private zone: NgZone, 
     private dialog: MatDialog,
     private contextMenuService: ContextMenuService,
-    private bookmarksService: BookmarksService) {
+    private bookmarksService: BookmarksService,
+    private clipboardService: ClipboardService) {
     super();
   }
 
@@ -41,24 +42,37 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
       this.cd.detectChanges();
     });
 
-    // Determine which context menu options this link will display
-    this.contextMenuOptions = [];
-    this.contextMenuOptions.push({ id: 'openCurrentTab', text: 'Open in Current Tab' });
-    this.contextMenuOptions.push({ id: 'openNewTab', text: 'Open in New Tab' });
-    this.contextMenuOptions.push({ id: 'openNewWindow', text: 'Open in New Window' });
-    this.contextMenuOptions.push({ id: 'openNewIWindow', text: 'Open in New Incognito Window' });
-    if (this.bookmark.modifiable) {
-      this.contextMenuOptions.push({ id: 'editBookmark', text: 'Edit Bookmark' });
-      this.contextMenuOptions.push({ id: 'deleteBookmark', text: 'Delete Bookmark' });
-    }
-
   }
 
   public triggerContextMenu(ev: MouseEvent): void {
+
     ev.preventDefault();
-    this.contextMenuService.openContextMenu(this.contextMenuOptions).pipe(takeUntil(this.onDestroy$)).subscribe(selectedOptionId => {
+
+    let contextMenuOptions: ContextMenuItem[] = [];
+
+    contextMenuOptions.push({ id: 'openCurrentTab', text: 'Open in Current Tab' });
+    contextMenuOptions.push({ id: 'openNewTab', text: 'Open in New Tab' });
+    contextMenuOptions.push({ id: 'openNewWindow', text: 'Open in New Window' });
+    contextMenuOptions.push({ id: 'openNewIWindow', text: 'Open in New Incognito Window' });
+
+    if (this.bookmark.modifiable) {
+      contextMenuOptions.push({ id: 'copyBookmark', text: 'Copy' });
+      contextMenuOptions.push({ id: 'cutBookmark', text: 'Cut' });
+    }
+
+    if (this.clipboardService.getClipboard()) {
+      contextMenuOptions.push({ id: 'pasteBookmark', text: 'Paste' });
+    }
+
+    if (this.bookmark.modifiable) {
+      contextMenuOptions.push({ id: 'editBookmark', text: 'Edit Bookmark' });
+      contextMenuOptions.push({ id: 'deleteBookmark', text: 'Delete Bookmark' });
+    }
+
+    this.contextMenuService.openContextMenu(contextMenuOptions).pipe(takeUntil(this.onDestroy$)).subscribe(selectedOptionId => {
       this.contextItemSelected(selectedOptionId)
     });
+
   }
 
   public openBookmark(ev: MouseEvent): void {
@@ -90,6 +104,15 @@ export class BookmarkLinkComponent extends ComponentBase implements OnInit {
           break;
         case 'openNewIWindow':
           this.bookmarksService.openInNewIWindow(this.bookmark);
+          break;
+        case 'copyBookmark':
+          this.clipboardService.setClipboard(this.bookmark.id, 'copy');
+          break;
+        case 'cutBookmark':
+          this.clipboardService.setClipboard(this.bookmark.id, 'cut');
+          break;
+        case 'pasteBookmark':
+          this.clipboardService.pasteClipboard(this.bookmark.id);
           break;
         case 'editBookmark':
           this.openEditDialog();
